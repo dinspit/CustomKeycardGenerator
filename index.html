@@ -4,380 +4,316 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Генератор ключ-карт</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:      #13161c;
-      --bg2:     #1a1e27;
-      --bg3:     #1f2430;
-      --surface: #242938;
-      --border:  rgba(255,255,255,0.08);
-      --border2: rgba(255,255,255,0.14);
-      --red:     #d42b2b;
-      --red-dim: rgba(212,43,43,0.15);
-      --text:    #e8eaf0;
-      --text2:   rgba(232,234,240,0.55);
-      --text3:   rgba(232,234,240,0.3);
-      --mono:    'IBM Plex Mono', monospace;
-      --sans:    'IBM Plex Sans', sans-serif;
-      --radius:  8px;
+      --bg:     #12151b;
+      --bg2:    #181c25;
+      --bg3:    #1d2230;
+      --surf:   #222840;
+      --bdr:    rgba(255,255,255,0.07);
+      --bdr2:   rgba(255,255,255,0.13);
+      --red:    #d42b2b;
+      --text:   #e6e9f2;
+      --text2:  rgba(230,233,242,0.52);
+      --text3:  rgba(230,233,242,0.28);
+      --mono:   'IBM Plex Mono', monospace;
+      --sans:   'IBM Plex Sans', sans-serif;
+      --r:      7px;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      min-height: 100vh;
-    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
 
-    /* ─── HEADER ─────────────────────────────────────── */
-    header {
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      height: 58px;
+    /* HEADER */
+    header{
+      background:var(--bg2);border-bottom:1px solid var(--bdr);
+      padding:0 1.8rem;display:flex;align-items:center;gap:1rem;height:54px;
     }
-    .logo-mark {
-      width: 28px; height: 28px;
-      background: var(--red);
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .logo-mark svg { width: 15px; height: 15px; fill: white; }
-    .header-title { font-size: 0.95rem; font-weight: 600; }
-    .header-sep { color: var(--text3); font-size: 0.8rem; }
-    .header-sub { font-size: 0.78rem; color: var(--text2); }
-    .header-right { margin-left: auto; font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 1px; }
+    .logo{width:26px;height:26px;background:var(--red);border-radius:4px;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo svg{width:14px;height:14px;fill:#fff}
+    .htitle{font-size:.9rem;font-weight:600}
+    .hsep{color:var(--text3)}
+    .hsub{font-size:.76rem;color:var(--text2)}
+    .hright{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--text3);letter-spacing:1px}
 
-    /* ─── LAYOUT ─────────────────────────────────────── */
-    .app {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 1.5rem 2rem 3rem;
-      display: grid;
-      grid-template-columns: 370px 1fr;
-      gap: 1.5rem;
-      align-items: start;
+    /* LAYOUT */
+    .app{
+      max-width:1280px;margin:0 auto;padding:1.4rem 1.8rem 3rem;
+      display:grid;grid-template-columns:360px 1fr;gap:1.4rem;align-items:start;
     }
-    .left-col { display: flex; flex-direction: column; gap: 1rem; }
-    .right-col { display: flex; flex-direction: column; gap: 1rem; }
+    .lcol,.rcol{display:flex;flex-direction:column;gap:1rem}
 
-    /* ─── PANELS ─────────────────────────────────────── */
-    .panel {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .panel-header {
-      padding: 0.7rem 1.2rem;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 0.6rem;
-    }
-    .panel-header h2 {
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.8px; text-transform: uppercase; color: var(--text2);
-    }
-    .ph-dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
-    .panel-body { padding: 1.1rem; }
+    /* PANEL */
+    .panel{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+    .ph{padding:.65rem 1.1rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:.55rem}
+    .ph h2{font-size:.7rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text2)}
+    .pdot{width:5px;height:5px;background:var(--red);border-radius:50%;flex-shrink:0}
+    .pb{padding:1rem}
 
-    /* ─── FORM ───────────────────────────────────────── */
-    .field { margin-bottom: 0.9rem; }
-    .field:last-child { margin-bottom: 0; }
-    label { display: block; font-size: 0.7rem; font-weight: 500; color: var(--text2); margin-bottom: 0.35rem; }
-    input[type=text], input[type=number], select {
-      width: 100%;
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      border-radius: 5px;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      padding: 0.52rem 0.72rem;
-      outline: none;
-      transition: border-color 0.15s;
-      appearance: none;
+    /* FORM */
+    .field{margin-bottom:.85rem}.field:last-child{margin-bottom:0}
+    label{display:block;font-size:.68rem;font-weight:500;color:var(--text2);margin-bottom:.3rem}
+    input[type=text],input[type=number],select{
+      width:100%;background:var(--bg3);border:1px solid var(--bdr2);border-radius:5px;
+      color:var(--text);font-family:var(--mono);font-size:.78rem;
+      padding:.48rem .7rem;outline:none;transition:border-color .15s;appearance:none;
     }
-    input:focus, select:focus { border-color: var(--red); }
-    select { cursor: pointer; }
-    select option { background: var(--bg3); }
+    input:focus,select:focus{border-color:var(--red)}
+    select{cursor:pointer}
+    select option{background:var(--bg3)}
 
-    /* ─── LEVELS ─────────────────────────────────────── */
-    .levels-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
-    .level-block label { font-size: 0.66rem; }
-    .level-ctrl {
-      display: flex; align-items: center;
-      border: 1px solid var(--border2); border-radius: 5px;
-      overflow: hidden; background: var(--bg3);
-    }
-    .lbtn {
-      width: 30px; height: 32px; background: none; border: none;
-      color: var(--text2); font-size: 1rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.12s; flex-shrink: 0;
-    }
-    .lbtn:hover { background: var(--surface); color: var(--text); }
-    .lnum {
-      flex: 1; text-align: center; font-family: var(--mono);
-      font-size: 0.95rem; font-weight: 500; color: var(--red);
-      background: transparent; border: none; outline: none; padding: 0;
-    }
+    /* LEVELS */
+    .lvrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.55rem}
+    .lvblock label{font-size:.65rem}
+    .lvc{display:flex;align-items:center;border:1px solid var(--bdr2);border-radius:5px;overflow:hidden;background:var(--bg3)}
+    .lbtn{width:28px;height:30px;background:none;border:none;color:var(--text2);font-size:.95rem;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s;flex-shrink:0}
+    .lbtn:hover{background:var(--surf);color:var(--text)}
+    .lnum{flex:1;text-align:center;font-family:var(--mono);font-size:.9rem;font-weight:500;
+      color:var(--red);background:transparent;border:none;outline:none;padding:0}
 
-    /* ─── COLOR ──────────────────────────────────────── */
-    .color-row { display: flex; gap: 0.5rem; align-items: center; }
-    input[type=color] {
-      width: 36px; height: 34px; padding: 2px 3px;
-      border: 1px solid var(--border2); border-radius: 5px;
-      background: var(--bg3); cursor: pointer; flex-shrink: 0;
-    }
-    .hex-input { flex: 1; }
+    /* COLOR */
+    .crow{display:flex;gap:.45rem;align-items:center}
+    input[type=color]{width:34px;height:30px;padding:2px 3px;border:1px solid var(--bdr2);
+      border-radius:5px;background:var(--bg3);cursor:pointer;flex-shrink:0}
 
-    /* ─── STAGE ──────────────────────────────────────── */
-    .stage {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.3rem;
-      display: flex; flex-direction: column; align-items: center; gap: 1rem;
-    }
-    .stage-label {
-      width: 100%; display: flex; justify-content: space-between;
-      font-size: 0.65rem; font-family: var(--mono); color: var(--text3);
-      padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
-    }
+    /* COMMAND */
+    .cmd{background:#0a0d12;border:1px solid var(--bdr2);border-radius:5px;
+      padding:.8rem .9rem;font-family:var(--mono);font-size:.74rem;color:#6be875;
+      line-height:1.5;word-break:break-all;min-height:50px}
+    .cmd::before{content:'> ';color:var(--red)}
+    .brow{display:flex;gap:.5rem;margin-top:.7rem}
+    .btn{display:inline-flex;align-items:center;gap:.35rem;padding:.48rem 1rem;
+      border:none;border-radius:5px;font-family:var(--sans);font-size:.74rem;
+      font-weight:500;cursor:pointer;transition:all .14s}
+    .btn-r{background:var(--red);color:#fff}.btn-r:hover{background:#e03030}
+    .btn-g{background:transparent;border:1px solid var(--bdr2);color:var(--text2)}.btn-g:hover{background:var(--surf);color:var(--text)}
+    .btn-ok{background:#163320;border:1px solid #2a6638;color:#6be875}
 
-    /* ─── CARD ───────────────────────────────────────── */
-    .card-wrap {
-      position: relative; width: 100%; max-width: 520px; user-select: none;
-    }
-    .card-base {
-      width: 100%; display: block; border-radius: 10px;
-      box-shadow: 0 6px 28px rgba(0,0,0,0.55);
-    }
+    /* STAGE */
+    .stage{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);
+      padding:1.2rem;display:flex;flex-direction:column;align-items:center;gap:.9rem}
+    .slabel{width:100%;display:flex;justify-content:space-between;
+      font-size:.62rem;font-family:var(--mono);color:var(--text3);
+      padding-bottom:.7rem;border-bottom:1px solid var(--bdr)}
 
-    /* ── Site02 / MetalCase: TOP stripe ── */
-    .overlay-std .stripe {
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 25%; border-radius: 10px 10px 0 0;
-      pointer-events: none; transition: background 0.3s;
-    }
-    .overlay-std .card-name {
-      position: absolute; top: 5%; left: 3.5%; right: 60%;
-      font-family: var(--sans); font-size: clamp(0.42rem,1.15vw,0.74rem);
-      font-weight: 600; color: #fff; text-transform: uppercase;
-      letter-spacing: 0.4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.4); pointer-events: none;
-    }
-    .overlay-std .card-dept {
-      position: absolute; top: 14.5%; left: 3.5%; right: 60%;
-      font-family: var(--mono); font-size: clamp(0.3rem,0.75vw,0.5rem);
-      color: rgba(255,255,255,0.8); white-space: nowrap; overflow: hidden;
-      text-overflow: ellipsis; pointer-events: none;
-    }
-    /* pips positioned over the 3x3 squares on the card image */
-    .overlay-std .pips {
-      position: absolute;
-      top: 28%; left: 2.2%; width: 50%; height: 69%;
-      display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
-      gap: 2.8%; pointer-events: none;
-    }
+    /* CARD WRAP */
+    .cw{position:relative;width:100%;max-width:520px;user-select:none}
+    .cb{width:100%;display:block;border-radius:10px;box-shadow:0 6px 28px rgba(0,0,0,.55)}
 
-    /* ── Management: LEFT stripe ── */
-    .overlay-mgmt .stripe {
-      position: absolute; top: 0; left: 0; bottom: 0;
-      width: 21%; border-radius: 10px 0 0 10px;
-      pointer-events: none; transition: background 0.3s;
-    }
-    .overlay-mgmt .card-name {
-      position: absolute; top: 3.5%; left: 23%; right: 4%;
-      font-family: var(--sans); font-size: clamp(0.4rem,1.1vw,0.7rem);
-      font-weight: 600; color: #111; text-transform: uppercase;
-      letter-spacing: 0.4px; white-space: nowrap; overflow: hidden;
-      text-overflow: ellipsis; pointer-events: none;
-    }
-    /* pips: center-right area of management card */
-    .overlay-mgmt .pips {
-      position: absolute;
-      top: 42%; left: 23%; width: 57%; height: 52%;
-      display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
-      gap: 3.5%; pointer-events: none;
-    }
+    /* ── Site02 / MetalCase overlay ─────────────────────────── */
+    .ov-std .stripe{
+      position:absolute;top:0;left:0;right:0;height:25%;
+      border-radius:10px 10px 0 0;pointer-events:none;transition:background .3s}
+    /* department = small, top-left of stripe */
+    .ov-std .c-dept{
+      position:absolute;top:4%;left:3.5%;right:55%;
+      font-family:var(--sans);font-size:clamp(.3rem,.7vw,.48rem);
+      font-weight:400;color:rgba(255,255,255,.85);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+    /* role = big, below dept */
+    .ov-std .c-role{
+      position:absolute;top:11%;left:3.5%;right:55%;
+      font-family:var(--sans);font-size:clamp(.4rem,1.1vw,.74rem);
+      font-weight:700;color:#fff;text-transform:uppercase;
+      letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      text-shadow:0 1px 4px rgba(0,0,0,.4);pointer-events:none}
+    /* pip grid: left portion, rows = admin/armory/containment top-to-bottom */
+    .ov-std .pips{
+      position:absolute;top:27%;left:2%;width:49%;height:70%;
+      display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+      gap:2.5%;pointer-events:none}
 
-    /* ── Task Force: FULL TINT ── */
-    .overlay-tf .tint {
-      position: absolute; inset: 0; border-radius: 10px;
-      mix-blend-mode: multiply; opacity: 0.4;
-      transition: background 0.3s; pointer-events: none;
-    }
-    .overlay-tf .card-name {
-      position: absolute; top: 6%; left: 11%; right: 52%;
-      font-family: var(--sans); font-size: clamp(0.4rem,1.1vw,0.7rem);
-      font-weight: 600; color: #1a1a1a; text-transform: uppercase;
-      letter-spacing: 0.4px; white-space: nowrap; overflow: hidden;
-      text-overflow: ellipsis; pointer-events: none;
-    }
-    /* pips left side of TF card */
-    .overlay-tf .pips {
-      position: absolute;
-      top: 30%; left: 4.5%; width: 44%; height: 65%;
-      display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
-      gap: 5%; pointer-events: none;
-    }
+    /* ── Management overlay ──────────────────────────────────── */
+    /* Dark header block at top */
+    .ov-mgmt .hdr{
+      position:absolute;top:0;left:0;right:0;height:32%;
+      border-radius:10px 10px 0 0;pointer-events:none;
+      transition:background .3s;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:3%}
+    .ov-mgmt .c-role{
+      position:absolute;top:5%;left:4%;right:4%;
+      font-family:var(--sans);font-size:clamp(.38rem,1.05vw,.7rem);
+      font-weight:700;color:#fff;text-transform:uppercase;
+      letter-spacing:.5px;text-align:center;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+    .ov-mgmt .c-dept{
+      position:absolute;top:17%;left:4%;right:4%;
+      font-family:var(--sans);font-size:clamp(.28rem,.65vw,.44rem);
+      font-weight:400;color:rgba(255,255,255,.75);text-align:center;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+    /* grid: right-center below header */
+    .ov-mgmt .pips{
+      position:absolute;top:36%;left:28%;width:62%;height:55%;
+      display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+      gap:3%;pointer-events:none}
 
-    /* pip cell */
-    .pip {
-      border-radius: 16%;
-      background: transparent;
-      border: 1.5px solid rgba(0,0,0,0.12);
-      transition: background 0.22s, box-shadow 0.22s;
-    }
-    .pip.lit { border-color: rgba(255,255,255,0.25); }
+    /* ── Task Force overlay ──────────────────────────────────── */
+    .ov-tf .tint{
+      position:absolute;inset:0;border-radius:10px;
+      mix-blend-mode:multiply;opacity:.42;transition:background .3s;pointer-events:none}
+    .ov-tf .c-dept{
+      position:absolute;top:4.5%;left:10%;right:50%;
+      font-family:var(--sans);font-size:clamp(.28rem,.65vw,.44rem);
+      color:rgba(20,20,20,.85);white-space:nowrap;overflow:hidden;
+      text-overflow:ellipsis;pointer-events:none}
+    .ov-tf .c-role{
+      position:absolute;top:10%;left:10%;right:50%;
+      font-family:var(--sans);font-size:clamp(.38rem,1vw,.66rem);
+      font-weight:700;color:#1a1a1a;text-transform:uppercase;
+      letter-spacing:.3px;white-space:nowrap;overflow:hidden;
+      text-overflow:ellipsis;pointer-events:none}
+    /* grid left side */
+    .ov-tf .pips{
+      position:absolute;top:30%;left:4%;width:44%;height:64%;
+      display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+      gap:4.5%;pointer-events:none}
 
-    /* ─── LEGEND ─────────────────────────────────────── */
-    .legend { display: flex; gap: 1rem; font-size: 0.67rem; color: var(--text2); font-family: var(--mono); }
-    .legend-item { display: flex; align-items: center; gap: 0.35rem; }
-    .ldot { width: 8px; height: 8px; border-radius: 2px; }
+    /* PIP CELL */
+    /* Row 0 = admin (gear), Row 1 = armory (guns), Row 2 = containment (SCP) */
+    .pip{border-radius:16%;background:transparent;border:1.5px solid rgba(0,0,0,.1);transition:background .2s,box-shadow .2s}
+    .pip.lit{border-color:rgba(255,255,255,.2)}
 
-    /* ─── COMMAND ────────────────────────────────────── */
-    .cmd-box {
-      background: #0c0f14; border: 1px solid var(--border2); border-radius: 6px;
-      padding: 0.85rem 1rem; font-family: var(--mono); font-size: 0.76rem;
-      color: #6be875; line-height: 1.5; word-break: break-all; min-height: 54px;
-    }
-    .cmd-box::before { content: '> '; color: var(--red); }
-    .btn-row { display: flex; gap: 0.6rem; margin-top: 0.75rem; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.52rem 1.1rem; border: none; border-radius: 5px;
-      font-family: var(--sans); font-size: 0.76rem; font-weight: 500;
-      cursor: pointer; transition: all 0.15s; letter-spacing: 0.2px;
-    }
-    .btn-red { background: var(--red); color: #fff; }
-    .btn-red:hover { background: #e03232; }
-    .btn-ok { background: #1a4d27; border: 1px solid #2a7a3c; color: #6be875; }
+    /* LEGEND */
+    .legend{display:flex;gap:1rem;font-size:.65rem;color:var(--text2);font-family:var(--mono)}
+    .li{display:flex;align-items:center;gap:.32rem}
+    .ld{width:7px;height:7px;border-radius:2px}
 
-    /* ─── PRESETS ────────────────────────────────────── */
-    .presets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px,1fr)); gap: 0.45rem; }
-    .preset {
-      background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 6px; padding: 0.65rem 0.75rem 0.65rem 1rem;
-      cursor: pointer; transition: all 0.14s; position: relative; overflow: hidden;
-    }
-    .preset::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px; background: var(--pc, var(--red));
-    }
-    .preset:hover { border-color: var(--pc, var(--red)); background: var(--surface); }
-    .preset-name { font-size: 0.78rem; font-weight: 600; margin-bottom: 0.18rem; }
-    .preset-info { font-size: 0.62rem; color: var(--text2); font-family: var(--mono); line-height: 1.4; }
-    .preset-pips { display: flex; gap: 3px; margin-top: 0.3rem; flex-wrap: wrap; }
-    .pp { width: 8px; height: 8px; border-radius: 2px; background: rgba(255,255,255,0.1); }
-    .pp.on { background: var(--pp-c, #fff); }
+    /* ── PRESETS SECTION ─────────────────────────────────────── */
+    .presets-tabs{display:flex;gap:2px;margin-bottom:.8rem}
+    .ptab{flex:1;padding:.4rem;font-family:var(--sans);font-size:.7rem;font-weight:500;
+      background:var(--bg3);border:1px solid var(--bdr2);border-radius:5px;
+      color:var(--text2);cursor:pointer;transition:all .14s;text-align:center}
+    .ptab.active{background:var(--red);color:#fff;border-color:var(--red)}
 
-    @media (max-width: 1050px) { .app { grid-template-columns: 1fr; } }
-    @media (max-width: 600px) {
-      .app { padding: 1rem; }
-      .levels-row { grid-template-columns: 1fr; }
-      .presets-grid { grid-template-columns: 1fr 1fr; }
+    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:.4rem}
+    .pcard{
+      background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;
+      padding:.6rem .7rem .6rem .95rem;cursor:pointer;transition:all .13s;
+      position:relative;overflow:hidden}
+    .pcard::before{content:'';position:absolute;left:0;top:0;bottom:0;
+      width:3px;background:var(--pc,var(--red))}
+    .pcard:hover{border-color:var(--pc,var(--red));background:var(--surf)}
+    .pname{font-size:.76rem;font-weight:600;margin-bottom:.14rem}
+    .pinfo{font-size:.6rem;color:var(--text2);font-family:var(--mono);line-height:1.4}
+    .ppips{display:flex;gap:2px;margin-top:.28rem;flex-wrap:wrap;align-items:center}
+    .pp{width:7px;height:7px;border-radius:2px;background:rgba(255,255,255,.1)}
+    .pp.on{background:var(--ppc,#fff)}
+    .pp-sep{width:3px}
+
+    /* Local preset controls */
+    .local-actions{display:flex;gap:.4rem;margin-bottom:.8rem}
+    .empty-local{
+      padding:1.5rem 1rem;text-align:center;
+      font-size:.72rem;color:var(--text3);font-family:var(--mono);
+      border:1px dashed var(--bdr2);border-radius:6px}
+    .del-btn{
+      position:absolute;top:4px;right:4px;width:16px;height:16px;
+      background:rgba(212,43,43,.7);border:none;border-radius:3px;
+      color:#fff;font-size:.6rem;cursor:pointer;display:none;
+      align-items:center;justify-content:center;line-height:1}
+    .pcard:hover .del-btn{display:flex}
+
+    /* modal */
+    .modal-bg{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+      z-index:100;align-items:center;justify-content:center}
+    .modal-bg.open{display:flex}
+    .modal{
+      background:var(--bg2);border:1px solid var(--bdr2);border-radius:var(--r);
+      padding:1.4rem;width:320px;max-width:95vw}
+    .modal h3{font-size:.85rem;font-weight:600;margin-bottom:1rem;color:var(--text)}
+    .modal .field{margin-bottom:.7rem}
+    .modal-btns{display:flex;gap:.5rem;margin-top:1rem;justify-content:flex-end}
+
+    @media(max-width:1050px){.app{grid-template-columns:1fr}}
+    @media(max-width:600px){
+      .app{padding:1rem}
+      .lvrow{grid-template-columns:1fr}
+      .pgrid{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-mark">
-    <svg viewBox="0 0 20 20"><path d="M10 1L3 5.5v9L10 19l7-4.5v-9L10 1zm0 2.2l5.3 3.4v6.8L10 16.8 4.7 13.4V6.6L10 3.2z"/></svg>
+  <div class="logo">
+    <svg viewBox="0 0 20 20"><path d="M10 1L3 5.5v9L10 19l7-4.5v-9L10 1zm0 2.2 5.3 3.4v6.8L10 16.8 4.7 13.4V6.6z"/></svg>
   </div>
-  <span class="header-title">Генератор ключ-карт</span>
-  <span class="header-sep">/</span>
-  <span class="header-sub">AmSerg Games</span>
-  <span class="header-right">CKRP v1.0</span>
+  <span class="htitle">Генератор ключ-карт</span>
+  <span class="hsep">/</span>
+  <span class="hsub">AmSerg Games</span>
+  <span class="hright">CKRP v1.0</span>
 </header>
 
 <div class="app">
 
-  <!-- ═══ ЛЕВАЯ КОЛОНКА ═══════════════════════════════ -->
-  <div class="left-col">
+  <!-- ════ ЛЕВАЯ КОЛОНКА ════════════════════════════════ -->
+  <div class="lcol">
 
     <div class="panel">
-      <div class="panel-header"><div class="ph-dot"></div><h2>Параметры карты</h2></div>
-      <div class="panel-body">
-        <div class="field">
-          <label>ID игрока</label>
-          <input type="text" id="cardId" value="0" placeholder="Steam / Player ID">
-        </div>
-        <div class="field">
-          <label>Имя карты (в инвентаре)</label>
-          <input type="text" id="keycardName" value="Ключ-Карта_Логиста" placeholder="Ключ-Карта_Логиста">
-        </div>
-        <div class="field">
-          <label>Департамент</label>
-          <input type="text" id="department" value="LOGISTICS_DEPARTMENT" placeholder="LOGISTICS_DEPARTMENT">
-        </div>
-        <div class="field">
-          <label>Роль / Должность</label>
-          <input type="text" id="position" value="Логист" placeholder="Логист или %Role%">
-        </div>
-        <div class="field">
-          <label>Тип карты</label>
+      <div class="ph"><div class="pdot"></div><h2>Параметры карты</h2></div>
+      <div class="pb">
+        <div class="field"><label>ID игрока</label>
+          <input type="text" id="cardId" value="0" placeholder="Steam / Player ID"></div>
+        <div class="field"><label>Имя карты в инвентаре</label>
+          <input type="text" id="kcName" value="Ключ-Карта_Логиста" placeholder="Ключ-Карта_Логиста"></div>
+        <div class="field"><label>Департамент (на карточке)</label>
+          <input type="text" id="dept" value="Логистическая Служба" placeholder="Логистическая Служба"></div>
+        <div class="field"><label>Роль / Должность (на карточке)</label>
+          <input type="text" id="role" value="Логист" placeholder="Логист или %Role%"></div>
+        <div class="field"><label>Тип карты</label>
           <select id="cardType">
             <option value="KeycardCustomSite02">Стандартная карта (Site-02)</option>
             <option value="KeycardCustomMetalCase">Карта в металлическом кейсе</option>
             <option value="KeycardCustomTaskForce">Карта оперативника (Task Force)</option>
             <option value="KeycardCustomManagement">Управленческая карта (Management)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Цвет карты</label>
-          <div class="color-row">
+          </select></div>
+        <div class="field"><label>Цвет карты</label>
+          <div class="crow">
             <input type="color" id="cardColor" value="#528198">
-            <input type="text" id="colorHex" class="hex-input" value="#528198" maxlength="7" placeholder="#RRGGBB">
-          </div>
-        </div>
+            <input type="text" id="colorHex" value="#528198" maxlength="7" placeholder="#RRGGBB">
+          </div></div>
       </div>
     </div>
 
     <div class="panel">
-      <div class="panel-header"><div class="ph-dot"></div><h2>Уровни доступа</h2></div>
-      <div class="panel-body">
-        <div class="levels-row">
-          <div class="level-block">
-            <label>Содержание</label>
-            <div class="level-ctrl">
-              <button class="lbtn" id="minusCon">−</button>
-              <input class="lnum" type="number" id="conLvl" min="0" max="3" value="0">
-              <button class="lbtn" id="plusCon">+</button>
-            </div>
-          </div>
-          <div class="level-block">
-            <label>Администр.</label>
-            <div class="level-ctrl">
-              <button class="lbtn" id="minusAdm">−</button>
+      <div class="ph"><div class="pdot"></div><h2>Уровни доступа</h2></div>
+      <div class="pb">
+        <div class="lvrow">
+          <div class="lvblock"><label>⚙ Администр.</label>
+            <div class="lvc">
+              <button class="lbtn" id="mAdm">−</button>
               <input class="lnum" type="number" id="admLvl" min="0" max="3" value="0">
-              <button class="lbtn" id="plusAdm">+</button>
-            </div>
-          </div>
-          <div class="level-block">
-            <label>Оружейная</label>
-            <div class="level-ctrl">
-              <button class="lbtn" id="minusArm">−</button>
+              <button class="lbtn" id="pAdm">+</button>
+            </div></div>
+          <div class="lvblock"><label>🔫 Оружейная</label>
+            <div class="lvc">
+              <button class="lbtn" id="mArm">−</button>
               <input class="lnum" type="number" id="armLvl" min="0" max="3" value="0">
-              <button class="lbtn" id="plusArm">+</button>
-            </div>
-          </div>
+              <button class="lbtn" id="pArm">+</button>
+            </div></div>
+          <div class="lvblock"><label>☢ Содержание</label>
+            <div class="lvc">
+              <button class="lbtn" id="mCon">−</button>
+              <input class="lnum" type="number" id="conLvl" min="0" max="3" value="0">
+              <button class="lbtn" id="pCon">+</button>
+            </div></div>
         </div>
       </div>
     </div>
 
     <div class="panel">
-      <div class="panel-header"><div class="ph-dot"></div><h2>Команда</h2></div>
-      <div class="panel-body">
-        <div class="cmd-box" id="cmdOut"></div>
-        <div class="btn-row">
-          <button class="btn btn-red" id="copyBtn">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>
+      <div class="ph"><div class="pdot"></div><h2>Команда</h2></div>
+      <div class="pb">
+        <div class="cmd" id="cmdOut"></div>
+        <div class="brow">
+          <button class="btn btn-r" id="copyBtn">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/>
+            </svg>
             Скопировать
           </button>
         </div>
@@ -386,33 +322,69 @@
 
   </div>
 
-  <!-- ═══ ПРАВАЯ КОЛОНКА ══════════════════════════════ -->
-  <div class="right-col">
+  <!-- ════ ПРАВАЯ КОЛОНКА ══════════════════════════════ -->
+  <div class="rcol">
 
     <div class="stage">
-      <div class="stage-label">
+      <div class="slabel">
         <span>ПРЕДПРОСМОТР</span>
         <span id="stageLabel">SITE-02 / СТАНДАРТНАЯ</span>
       </div>
-      <div class="card-wrap" id="cardWrap"></div>
+      <div class="cw" id="cardWrap"></div>
       <div class="legend">
-        <div class="legend-item"><div class="ldot" style="background:#c0181a"></div>Содержание</div>
-        <div class="legend-item"><div class="ldot" style="background:#d4aa4a"></div>Администр.</div>
-        <div class="legend-item"><div class="ldot" style="background:#4a8ed4"></div>Оружейная</div>
+        <div class="li"><div class="ld" style="background:#d4aa4a"></div>⚙ Администр.</div>
+        <div class="li"><div class="ld" style="background:#4a8ed4"></div>🔫 Оружейная</div>
+        <div class="li"><div class="ld" style="background:#c0181a"></div>☢ Содержание</div>
       </div>
     </div>
 
     <div class="panel">
-      <div class="panel-header"><div class="ph-dot"></div><h2>Шаблоны</h2></div>
-      <div class="panel-body">
-        <div class="presets-grid" id="presetsGrid"></div>
+      <div class="ph"><div class="pdot"></div><h2>Шаблоны</h2></div>
+      <div class="pb">
+        <div class="presets-tabs">
+          <button class="ptab active" id="tabServer" onclick="switchTab('server')">Серверные</button>
+          <button class="ptab" id="tabLocal" onclick="switchTab('local')">Мои шаблоны</button>
+        </div>
+
+        <!-- Server presets -->
+        <div id="paneServer">
+          <div class="pgrid" id="serverGrid"></div>
+        </div>
+
+        <!-- Local presets -->
+        <div id="paneLocal" style="display:none">
+          <div class="local-actions">
+            <button class="btn btn-r" onclick="openSaveModal()">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
+              Сохранить текущую
+            </button>
+            <button class="btn btn-g" onclick="clearLocalPresets()">Очистить все</button>
+          </div>
+          <div class="pgrid" id="localGrid"></div>
+          <div class="empty-local" id="localEmpty">Нет сохранённых шаблонов.<br>Настройте карточку и нажмите «Сохранить текущую».</div>
+        </div>
       </div>
     </div>
 
   </div>
 </div>
 
+<!-- SAVE MODAL -->
+<div class="modal-bg" id="saveModal">
+  <div class="modal">
+    <h3>Сохранить шаблон</h3>
+    <div class="field"><label>Название шаблона</label>
+      <input type="text" id="presetNameInput" placeholder="Например: Мой логист" maxlength="40">
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-g" onclick="closeSaveModal()">Отмена</button>
+      <button class="btn btn-r" onclick="saveLocalPreset()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
 <script>
+// ── CONSTANTS ────────────────────────────────────────────────────────────────
 const IMAGES = {
   KeycardCustomSite02:     'Keycard_CustomSite02.png',
   KeycardCustomMetalCase:  'Keycard_CustomSite02.png',
@@ -425,168 +397,307 @@ const TYPE_LABELS = {
   KeycardCustomTaskForce:  'TASK FORCE / ОПЕРАТИВНИК',
   KeycardCustomManagement: 'MANAGEMENT / УПРАВЛЕНИЕ',
 };
-// Row order: 0=Containment, 1=Admin, 2=Armory  (matches plugin code level display)
-const ROW_COLORS = ['#c0181a', '#d4aa4a', '#4a8ed4'];
+// Pip rows top→bottom: [0]=Admin(gear), [1]=Armory(guns), [2]=Containment(SCP)
+const ROW_COLORS = ['#d4aa4a', '#4a8ed4', '#c0181a'];
 
-const PRESETS = [
-  { name:'Директор участка',  dept:'ADMINISTRATION',         pos:'Директор_Участка',   type:'KeycardCustomMetalCase',  color:'#960030', con:3,adm:3,arm:3 },
-  { name:'Рук. исследований', dept:'SCIENTIFIC_DEPARTMENT',  pos:'Руководитель',       type:'KeycardCustomMetalCase',  color:'#d4a020', con:3,adm:3,arm:1 },
-  { name:'Ст. научный сотр.', dept:'SCIENTIFIC_DEPARTMENT',  pos:'Ст._Науч._Сотр.',    type:'KeycardCustomSite02',     color:'#d4a020', con:3,adm:1,arm:0 },
-  { name:'Научный сотрудник', dept:'SCIENTIFIC_DEPARTMENT',  pos:'Научный_Сотрудник',  type:'KeycardCustomSite02',     color:'#d4a020', con:2,adm:1,arm:0 },
-  { name:'Куратор SCP',       dept:'SCIENTIFIC_DEPARTMENT',  pos:'Куратор_SCP-000',    type:'KeycardCustomSite02',     color:'#d4a020', con:3,adm:1,arm:2 },
-  { name:'Командир МОГ',      dept:'MTF_DIVISION',           pos:'Командир_МОГ',       type:'KeycardCustomTaskForce',  color:'#1e3a8a', con:3,adm:3,arm:3 },
-  { name:'Оперативник МОГ',   dept:'MTF_DIVISION',           pos:'Оперативник_МОГ',    type:'KeycardCustomTaskForce',  color:'#1e3a8a', con:2,adm:1,arm:2 },
-  { name:'Нач. охраны',       dept:'SECURITY_DEPARTMENT',    pos:'Нач._Охраны',        type:'KeycardCustomSite02',     color:'#4a6741', con:2,adm:2,arm:3 },
-  { name:'Охранник',          dept:'SECURITY_DEPARTMENT',    pos:'Охранник',           type:'KeycardCustomSite02',     color:'#4a6741', con:1,adm:0,arm:2 },
-  { name:'Инженер',           dept:'ENGINEERING_&_TECH',     pos:'Инженер',            type:'KeycardCustomSite02',     color:'#00ad76', con:3,adm:1,arm:0 },
-  { name:'IT-специалист',     dept:'ENGINEERING_&_TECH',     pos:'IT-Специалист',      type:'KeycardCustomSite02',     color:'#00ad76', con:2,adm:1,arm:0 },
-  { name:'Логист',            dept:'LOGISTICS_DEPARTMENT',   pos:'Логист',             type:'KeycardCustomSite02',     color:'#0048ad', con:1,adm:0,arm:0 },
-  { name:'Менеджер',          dept:'MANAGEMENT',             pos:'Менеджер',           type:'KeycardCustomManagement', color:'#6b21a8', con:2,adm:3,arm:1 },
+// Server-defined presets (from Atlas HRP)
+const SERVER_PRESETS = [
+  { name:'Директор участка',  dept:'Административная служба',  role:'Директор Участка',    type:'KeycardCustomMetalCase',  color:'#960030', adm:3,arm:3,con:3 },
+  { name:'Рук. исследований', dept:'Научная служба',           role:'Руководитель',         type:'KeycardCustomMetalCase',  color:'#c89020', adm:3,arm:1,con:3 },
+  { name:'Ст. научный сотр.', dept:'Научная служба',           role:'Ст. Научный Сотр.',    type:'KeycardCustomSite02',     color:'#c89020', adm:1,arm:0,con:3 },
+  { name:'Научный сотрудник', dept:'Научная служба',           role:'Научный Сотрудник',    type:'KeycardCustomSite02',     color:'#c89020', adm:1,arm:0,con:2 },
+  { name:'Куратор SCP',       dept:'Научная служба',           role:'Куратор SCP-000',      type:'KeycardCustomSite02',     color:'#c89020', adm:1,arm:2,con:3 },
+  { name:'Командир МОГ',      dept:'Мобильная Оперативная Группа', role:'Командир МОГ',    type:'KeycardCustomTaskForce',  color:'#1e3a8a', adm:3,arm:3,con:3 },
+  { name:'Оперативник МОГ',   dept:'Мобильная Оперативная Группа', role:'Оперативник',     type:'KeycardCustomTaskForce',  color:'#1e3a8a', adm:1,arm:2,con:2 },
+  { name:'Нач. охраны',       dept:'Служба безопасности',      role:'Начальник Охраны',     type:'KeycardCustomSite02',     color:'#4a6741', adm:2,arm:3,con:2 },
+  { name:'Охранник',          dept:'Служба безопасности',      role:'Рядовой',              type:'KeycardCustomSite02',     color:'#4a6741', adm:0,arm:2,con:1 },
+  { name:'Инженер',           dept:'Инженерно-технический отд.',role:'Инженер',             type:'KeycardCustomSite02',     color:'#00ad76', adm:1,arm:0,con:3 },
+  { name:'IT-специалист',     dept:'Инженерно-технический отд.',role:'IT-Специалист',        type:'KeycardCustomSite02',     color:'#00ad76', adm:1,arm:0,con:2 },
+  { name:'Логист',            dept:'Логистическая служба',     role:'Логист',               type:'KeycardCustomSite02',     color:'#0048ad', adm:0,arm:0,con:1 },
+  { name:'Менеджер зон',      dept:'Административная служба',  role:'Менеджер Зон Содержания', type:'KeycardCustomManagement', color:'#2c5f5f', adm:3,arm:1,con:2 },
 ];
 
+// ── DOM REFS ─────────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const clamp = (v,a,b) => Math.min(b,Math.max(a,isNaN(v)?0:v));
 const validHex = h => /^#[0-9a-fA-F]{6}$/.test(h);
-const escHtml = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const fmt = s => s.replace(/ /g,'_');
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const fmtCmd = s => s.replace(/ /g,'_');
 
-// steppers
-function stepper(el, minId, plusId) {
-  $(minId).onclick = () => { el.value=clamp(+el.value-1,0,3); update(); };
-  $(plusId).onclick = () => { el.value=clamp(+el.value+1,0,3); update(); };
-  el.addEventListener('input', update);
+// ── STEPPERS ──────────────────────────────────────────────────────────────────
+function stepper(el,mId,pId){
+  $(mId).onclick=()=>{el.value=clamp(+el.value-1,0,3);update()};
+  $(pId).onclick=()=>{el.value=clamp(+el.value+1,0,3);update()};
+  el.addEventListener('input',update);
 }
-stepper($('conLvl'),'minusCon','plusCon');
-stepper($('admLvl'),'minusAdm','plusAdm');
-stepper($('armLvl'),'minusArm','plusArm');
+stepper($('admLvl'),'mAdm','pAdm');
+stepper($('armLvl'),'mArm','pArm');
+stepper($('conLvl'),'mCon','pCon');
 
-const cardColor = $('cardColor');
-const colorHex  = $('colorHex');
-cardColor.addEventListener('input', () => { colorHex.value=cardColor.value; update(); });
-colorHex.addEventListener('input', () => { if(validHex(colorHex.value)) cardColor.value=colorHex.value; update(); });
-['cardId','keycardName','department','position','cardType'].forEach(id => $(id).addEventListener('input', update));
-$('department').addEventListener('input', () => { $('department').value = $('department').value.toUpperCase(); });
+const cardColor=$('cardColor'), colorHex=$('colorHex');
+cardColor.addEventListener('input',()=>{colorHex.value=cardColor.value;update()});
+colorHex.addEventListener('input',()=>{if(validHex(colorHex.value))cardColor.value=colorHex.value;update()});
+['cardId','kcName','dept','role','cardType'].forEach(id=>$(id).addEventListener('input',update));
 
-// ── build pips html (row-major: 3 rows × 3 cols) ────────────────────────────
-function buildPips(levels) {
-  // levels[0]=containment, levels[1]=admin, levels[2]=armory
-  let h = '';
-  for (let row=0; row<3; row++) {
-    for (let col=0; col<3; col++) {
-      const lit = col < levels[row];
-      const c   = ROW_COLORS[row];
-      h += lit
-        ? `<div class="pip lit" style="background:${c};box-shadow:0 0 6px ${c}88"></div>`
-        : `<div class="pip"></div>`;
+// ── BUILD PIPS ────────────────────────────────────────────────────────────────
+// rows: [adm, arm, con] top to bottom
+function buildPips(adm,arm,con){
+  const levels=[adm,arm,con];
+  let h='';
+  for(let r=0;r<3;r++){
+    for(let c=0;c<3;c++){
+      const lit=c<levels[r];
+      const col=ROW_COLORS[r];
+      h+=lit
+        ?`<div class="pip lit" style="background:${col};box-shadow:0 0 5px ${col}88"></div>`
+        :`<div class="pip"></div>`;
     }
   }
   return h;
 }
 
-// ── render card preview ──────────────────────────────────────────────────────
-function buildCard(type, color, name, deptVal, levels) {
-  const src = IMAGES[type] || IMAGES.KeycardCustomSite02;
-  const n   = escHtml(name.replace(/_/g,' '));
-  const d   = escHtml(deptVal.replace(/_/g,' '));
-  const p   = buildPips(levels);
+// ── BUILD CARD HTML ───────────────────────────────────────────────────────────
+function buildCard(type,color,dept,role,adm,arm,con){
+  const src=IMAGES[type]||IMAGES.KeycardCustomSite02;
+  const d=esc(dept), r=esc(role);
+  const p=buildPips(adm,arm,con);
 
-  if (type === 'KeycardCustomTaskForce') {
-    return `<img class="card-base" src="${src}" alt="карта">
-    <div class="overlay-tf">
+  if(type==='KeycardCustomTaskForce'){
+    return `<img class="cb" src="${src}" alt="карта">
+    <div class="ov-tf">
       <div class="tint" style="background:${color}"></div>
-      <div class="card-name">${n}</div>
+      <div class="c-dept">${d}</div>
+      <div class="c-role">${r}</div>
       <div class="pips">${p}</div>
     </div>`;
   }
-  if (type === 'KeycardCustomManagement') {
-    return `<img class="card-base" src="${src}" alt="карта">
-    <div class="overlay-mgmt">
-      <div class="stripe" style="background:${color}"></div>
-      <div class="card-name">${n}</div>
+  if(type==='KeycardCustomManagement'){
+    return `<img class="cb" src="${src}" alt="карта">
+    <div class="ov-mgmt">
+      <div class="hdr" style="background:${color}"></div>
+      <div class="c-role">${r}</div>
+      <div class="c-dept">${d}</div>
       <div class="pips">${p}</div>
     </div>`;
   }
   // Site02 / MetalCase
-  return `<img class="card-base" src="${src}" alt="карта">
-  <div class="overlay-std">
+  return `<img class="cb" src="${src}" alt="карта">
+  <div class="ov-std">
     <div class="stripe" style="background:${color}"></div>
-    <div class="card-name">${n}</div>
-    <div class="card-dept">${d}</div>
+    <div class="c-dept">${d}</div>
+    <div class="c-role">${r}</div>
     <div class="pips">${p}</div>
   </div>`;
 }
 
-// ── main update ──────────────────────────────────────────────────────────────
-function update() {
+// ── MAIN UPDATE ───────────────────────────────────────────────────────────────
+function update(){
   const type  = $('cardType').value;
-  const name  = $('keycardName').value || 'Ключ-Карта';
-  const deptV = $('department').value  || 'DEPARTMENT';
-  const posV  = $('position').value    || 'Роль';
-  const color = validHex(colorHex.value) ? colorHex.value : cardColor.value;
-  const con   = clamp(+$('conLvl').value,0,3);
+  const name  = $('kcName').value  || 'Ключ-Карта';
+  const deptV = $('dept').value    || 'Департамент';
+  const roleV = $('role').value    || 'Роль';
+  const color = validHex(colorHex.value)?colorHex.value:cardColor.value;
   const adm   = clamp(+$('admLvl').value,0,3);
   const arm   = clamp(+$('armLvl').value,0,3);
-  const id    = $('cardId').value || '0';
+  const con   = clamp(+$('conLvl').value,0,3);
+  const id    = $('cardId').value  || '0';
 
-  $('cmdOut').textContent =
-    `ckrp add ${type} ${con} ${adm} ${arm} ${fmt(deptV)} ${fmt(posV)} ${color} ${fmt(name)} ${id}`;
+  // Command — args: type containment admin armory dept role color name id
+  $('cmdOut').textContent=
+    `ckrp add ${type} ${con} ${adm} ${arm} ${fmtCmd(deptV)} ${fmtCmd(roleV)} ${color} ${fmtCmd(name)} ${id}`;
 
-  $('cardWrap').innerHTML = buildCard(type, color, name, deptV, [con, adm, arm]);
-  $('stageLabel').textContent = TYPE_LABELS[type] || type;
+  $('cardWrap').innerHTML=buildCard(type,color,deptV,roleV,adm,arm,con);
+  $('stageLabel').textContent=TYPE_LABELS[type]||type;
 }
 
-// ── copy ─────────────────────────────────────────────────────────────────────
-$('copyBtn').addEventListener('click', async () => {
-  const text = $('cmdOut').textContent;
-  try { await navigator.clipboard.writeText(text); }
-  catch {
-    const t=document.createElement('textarea');
-    t.value=text; document.body.appendChild(t); t.select();
-    document.execCommand('copy'); document.body.removeChild(t);
-  }
-  const btn=$('copyBtn');
-  btn.textContent='✓  Скопировано!'; btn.className='btn btn-ok';
+// ── COPY ──────────────────────────────────────────────────────────────────────
+$('copyBtn').addEventListener('click',async()=>{
+  const text=$('cmdOut').textContent;
+  try{await navigator.clipboard.writeText(text)}
+  catch{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t)}
+  const b=$('copyBtn');
+  b.textContent='✓  Скопировано!';b.className='btn btn-ok';
   setTimeout(()=>{
-    btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg> Скопировать`;
-    btn.className='btn btn-red';
-  }, 2000);
+    b.innerHTML=`<svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg> Скопировать`;
+    b.className='btn btn-r';
+  },2000);
 });
 
-// ── presets ───────────────────────────────────────────────────────────────────
-(function buildPresets() {
-  const grid = $('presetsGrid');
-  const mkPips = (lvl, col) => Array.from({length:3},(_,i)=>
-    `<div class="pp${i<lvl?' on':''}" style="${i<lvl?`--pp-c:${col}`:''}"></div>`
+// ── PRESET CARD HTML ──────────────────────────────────────────────────────────
+function makePipDots(lvl,col){
+  return Array.from({length:3},(_,i)=>
+    `<div class="pp${i<lvl?' on':''}" ${i<lvl?`style="--ppc:${col}"`:''}></div>`
   ).join('');
+}
+function presetCardHTML(p, isLocal=false, idx=null){
+  const delBtn=isLocal?`<button class="del-btn" onclick="deleteLocalPreset(${idx},event)" title="Удалить">✕</button>`:'';
+  return `
+    <div class="pcard" style="--pc:${p.color}" onclick="applyPreset(${isLocal?'null':JSON.stringify(p).replace(/"/g,"'")},${isLocal?idx:'null'})">
+      ${delBtn}
+      <div class="pname">${esc(p.name)}</div>
+      <div class="pinfo">${esc((p.dept||'').substring(0,22))}</div>
+      <div class="ppips">
+        ${makePipDots(p.adm,'#d4aa4a')}<div class="pp-sep"></div>
+        ${makePipDots(p.arm,'#4a8ed4')}<div class="pp-sep"></div>
+        ${makePipDots(p.con,'#c0181a')}
+      </div>
+    </div>`;
+}
 
-  PRESETS.forEach(p => {
+// ── APPLY PRESET ─────────────────────────────────────────────────────────────
+function applyPreset(pObj, localIdx){
+  const p = pObj || getLocalPresets()[localIdx];
+  $('cardType').value  = p.type;
+  $('kcName').value    = p.kcName || (p.role+' Карта');
+  $('dept').value      = p.dept;
+  $('role').value      = p.role;
+  cardColor.value      = p.color;
+  colorHex.value       = p.color;
+  $('admLvl').value    = p.adm;
+  $('armLvl').value    = p.arm;
+  $('conLvl').value    = p.con;
+  update();
+}
+
+// ── RENDER SERVER PRESETS ─────────────────────────────────────────────────────
+function renderServerPresets(){
+  $('serverGrid').innerHTML = SERVER_PRESETS.map(p=>
+    presetCardHTML(p,false)
+  ).join('');
+}
+
+// onclick for server (inline obj gets quotes mangled, use data approach)
+window.applyPreset=function(pObj,localIdx){
+  const p = pObj!==null ? pObj : getLocalPresets()[localIdx];
+  $('cardType').value  = p.type;
+  $('kcName').value    = p.kcName || p.role.replace(/ /g,'_');
+  $('dept').value      = p.dept;
+  $('role').value      = p.role;
+  cardColor.value      = p.color;
+  colorHex.value       = p.color;
+  $('admLvl').value    = p.adm;
+  $('armLvl').value    = p.arm;
+  $('conLvl').value    = p.con;
+  update();
+};
+
+function renderServerPresetsClean(){
+  const grid=$('serverGrid');
+  grid.innerHTML='';
+  SERVER_PRESETS.forEach(p=>{
     const el=document.createElement('div');
-    el.className='preset';
-    el.style.setProperty('--pc', p.color);
+    el.className='pcard';
+    el.style.setProperty('--pc',p.color);
     el.innerHTML=`
-      <div class="preset-name">${p.name}</div>
-      <div class="preset-info">${p.dept.replace(/_/g,' ')}</div>
-      <div class="preset-pips">
-        ${mkPips(p.con,'#c0181a')}<div style="width:3px"></div>
-        ${mkPips(p.adm,'#d4aa4a')}<div style="width:3px"></div>
-        ${mkPips(p.arm,'#4a8ed4')}
+      <div class="pname">${esc(p.name)}</div>
+      <div class="pinfo">${esc(p.dept.substring(0,24))}</div>
+      <div class="ppips">
+        ${makePipDots(p.adm,'#d4aa4a')}<div class="pp-sep"></div>
+        ${makePipDots(p.arm,'#4a8ed4')}<div class="pp-sep"></div>
+        ${makePipDots(p.con,'#c0181a')}
       </div>`;
-    el.addEventListener('click', ()=>{
-      $('cardType').value    = p.type;
-      $('keycardName').value = p.pos;
-      $('department').value  = p.dept;
-      $('position').value    = p.pos.replace(/_/g,' ');
-      cardColor.value        = p.color;
-      colorHex.value         = p.color;
-      $('conLvl').value      = p.con;
-      $('admLvl').value      = p.adm;
-      $('armLvl').value      = p.arm;
-      update();
-    });
+    el.addEventListener('click',()=>window.applyPreset(p,null));
     grid.appendChild(el);
   });
-})();
+}
 
+// ── LOCAL PRESETS (localStorage) ──────────────────────────────────────────────
+const LS_KEY='ckrp_local_presets';
+function getLocalPresets(){
+  try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]')}catch{return[]}
+}
+function saveLocalPresetsArr(arr){
+  localStorage.setItem(LS_KEY,JSON.stringify(arr));
+}
+
+function renderLocalPresets(){
+  const arr=getLocalPresets();
+  const grid=$('localGrid');
+  const empty=$('localEmpty');
+  grid.innerHTML='';
+  if(arr.length===0){empty.style.display='block';return}
+  empty.style.display='none';
+  arr.forEach((p,i)=>{
+    const el=document.createElement('div');
+    el.className='pcard';
+    el.style.setProperty('--pc',p.color);
+    // delete btn
+    const del=document.createElement('button');
+    del.className='del-btn';
+    del.textContent='✕';
+    del.title='Удалить';
+    del.addEventListener('click',e=>{e.stopPropagation();deleteLocal(i)});
+    el.innerHTML=`
+      <div class="pname">${esc(p.name)}</div>
+      <div class="pinfo">${esc((p.dept||'').substring(0,24))}</div>
+      <div class="ppips">
+        ${makePipDots(p.adm,'#d4aa4a')}<div class="pp-sep"></div>
+        ${makePipDots(p.arm,'#4a8ed4')}<div class="pp-sep"></div>
+        ${makePipDots(p.con,'#c0181a')}
+      </div>`;
+    el.appendChild(del);
+    el.addEventListener('click',()=>window.applyPreset(p,null));
+    grid.appendChild(el);
+  });
+}
+function deleteLocal(idx){
+  const arr=getLocalPresets();
+  arr.splice(idx,1);
+  saveLocalPresetsArr(arr);
+  renderLocalPresets();
+}
+window.deleteLocalPreset=(idx,e)=>{if(e)e.stopPropagation();deleteLocal(idx)};
+
+// ── SAVE MODAL ────────────────────────────────────────────────────────────────
+window.openSaveModal=()=>{
+  $('presetNameInput').value=$('role').value||'';
+  $('saveModal').classList.add('open');
+  $('presetNameInput').focus();
+};
+window.closeSaveModal=()=>$('saveModal').classList.remove('open');
+window.saveLocalPreset=()=>{
+  const nameVal=$('presetNameInput').value.trim();
+  if(!nameVal)return;
+  const color=validHex(colorHex.value)?colorHex.value:cardColor.value;
+  const preset={
+    name:nameVal,
+    dept:$('dept').value,
+    role:$('role').value,
+    kcName:$('kcName').value,
+    type:$('cardType').value,
+    color,
+    adm:clamp(+$('admLvl').value,0,3),
+    arm:clamp(+$('armLvl').value,0,3),
+    con:clamp(+$('conLvl').value,0,3),
+  };
+  const arr=getLocalPresets();
+  arr.push(preset);
+  saveLocalPresetsArr(arr);
+  renderLocalPresets();
+  closeSaveModal();
+};
+window.clearLocalPresets=()=>{
+  if(!confirm('Удалить все локальные шаблоны?'))return;
+  saveLocalPresetsArr([]);
+  renderLocalPresets();
+};
+
+// Close modal on backdrop click
+$('saveModal').addEventListener('click',e=>{if(e.target===$('saveModal'))closeSaveModal()});
+// Enter to save
+$('presetNameInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveLocalPreset()});
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+window.switchTab=(tab)=>{
+  $('tabServer').classList.toggle('active',tab==='server');
+  $('tabLocal').classList.toggle('active',tab==='local');
+  $('paneServer').style.display=tab==='server'?'':'none';
+  $('paneLocal').style.display=tab==='local'?'':'none';
+  if(tab==='local')renderLocalPresets();
+};
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderServerPresetsClean();
 update();
 </script>
 </body>
