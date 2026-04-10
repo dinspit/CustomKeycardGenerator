@@ -4,701 +4,128 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Генератор ключ-карт</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:     #12151b;
-      --bg2:    #181c25;
-      --bg3:    #1d2230;
-      --surf:   #222840;
-      --bdr:    rgba(255,255,255,0.07);
-      --bdr2:   rgba(255,255,255,0.13);
-      --red:    #d42b2b;
-      --text:   #e6e9f2;
-      --text2:  rgba(230,233,242,0.52);
-      --text3:  rgba(230,233,242,0.28);
-      --mono:   'IBM Plex Mono', monospace;
-      --sans:   'IBM Plex Sans', sans-serif;
-      --r:      7px;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
-
-    /* HEADER */
-    header{
-      background:var(--bg2);border-bottom:1px solid var(--bdr);
-      padding:0 1.8rem;display:flex;align-items:center;gap:1rem;height:54px;
-    }
-    .logo{width:26px;height:26px;background:var(--red);border-radius:4px;
-      display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .logo svg{width:14px;height:14px;fill:#fff}
-    .htitle{font-size:.9rem;font-weight:600}
-    .hsep{color:var(--text3)}
-    .hsub{font-size:.76rem;color:var(--text2)}
-    .hright{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--text3);letter-spacing:1px}
-
-    /* LAYOUT */
-    .app{
-      max-width:1280px;margin:0 auto;padding:1.4rem 1.8rem 3rem;
-      display:grid;grid-template-columns:360px 1fr;gap:1.4rem;align-items:start;
-    }
-    .lcol,.rcol{display:flex;flex-direction:column;gap:1rem}
-
-    /* PANEL */
-    .panel{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
-    .ph{padding:.65rem 1.1rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:.55rem}
-    .ph h2{font-size:.7rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text2)}
-    .pdot{width:5px;height:5px;background:var(--red);border-radius:50%;flex-shrink:0}
-    .pb{padding:1rem}
-
-    /* FORM */
-    .field{margin-bottom:.85rem}.field:last-child{margin-bottom:0}
-    label{display:block;font-size:.68rem;font-weight:500;color:var(--text2);margin-bottom:.3rem}
-    input[type=text],input[type=number],select{
-      width:100%;background:var(--bg3);border:1px solid var(--bdr2);border-radius:5px;
-      color:var(--text);font-family:var(--mono);font-size:.78rem;
-      padding:.48rem .7rem;outline:none;transition:border-color .15s;appearance:none;
-    }
-    input:focus,select:focus{border-color:var(--red)}
-    select{cursor:pointer}
-    select option{background:var(--bg3)}
-
-    /* LEVELS */
-    .lvrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.55rem}
-    .lvblock label{font-size:.65rem}
-    .lvc{display:flex;align-items:center;border:1px solid var(--bdr2);border-radius:5px;overflow:hidden;background:var(--bg3)}
-    .lbtn{width:28px;height:30px;background:none;border:none;color:var(--text2);font-size:.95rem;
-      cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s;flex-shrink:0}
-    .lbtn:hover{background:var(--surf);color:var(--text)}
-    .lnum{flex:1;text-align:center;font-family:var(--mono);font-size:.9rem;font-weight:500;
-      color:var(--red);background:transparent;border:none;outline:none;padding:0}
-
-    /* COLOR */
-    .crow{display:flex;gap:.45rem;align-items:center}
-    input[type=color]{width:34px;height:30px;padding:2px 3px;border:1px solid var(--bdr2);
-      border-radius:5px;background:var(--bg3);cursor:pointer;flex-shrink:0}
-
-    /* COMMAND */
-    .cmd{background:#0a0d12;border:1px solid var(--bdr2);border-radius:5px;
-      padding:.8rem .9rem;font-family:var(--mono);font-size:.74rem;color:#6be875;
-      line-height:1.5;word-break:break-all;min-height:50px}
-    .cmd::before{content:'> ';color:var(--red)}
-    .brow{display:flex;gap:.5rem;margin-top:.7rem}
-    .btn{display:inline-flex;align-items:center;gap:.35rem;padding:.48rem 1rem;
-      border:none;border-radius:5px;font-family:var(--sans);font-size:.74rem;
-      font-weight:500;cursor:pointer;transition:all .14s}
-    .btn-r{background:var(--red);color:#fff}.btn-r:hover{background:#e03030}
-    .btn-g{background:transparent;border:1px solid var(--bdr2);color:var(--text2)}.btn-g:hover{background:var(--surf);color:var(--text)}
-    .btn-ok{background:#163320;border:1px solid #2a6638;color:#6be875}
-
-    /* STAGE */
-    .stage{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);
-      padding:1.2rem;display:flex;flex-direction:column;align-items:center;gap:.9rem}
-    .slabel{width:100%;display:flex;justify-content:space-between;
-      font-size:.62rem;font-family:var(--mono);color:var(--text3);
-      padding-bottom:.7rem;border-bottom:1px solid var(--bdr)}
-
-    /* CARD WRAP */
-    .cw{position:relative;width:100%;max-width:520px;user-select:none}
-    .cb{width:100%;display:block;border-radius:10px;box-shadow:0 6px 28px rgba(0,0,0,.55)}
-
-    /* ── Site02 / MetalCase overlay ─────────────────────────── */
-    .ov-std .stripe{
-      position:absolute;top:0;left:0;right:0;height:25%;
-      border-radius:10px 10px 0 0;pointer-events:none;transition:background .3s}
-    /* department = small, top-left of stripe */
-    .ov-std .c-dept{
-      position:absolute;top:4%;left:3.5%;right:55%;
-      font-family:var(--sans);font-size:clamp(.3rem,.7vw,.48rem);
-      font-weight:400;color:rgba(255,255,255,.85);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
-    /* role = big, below dept */
-    .ov-std .c-role{
-      position:absolute;top:11%;left:3.5%;right:55%;
-      font-family:var(--sans);font-size:clamp(.4rem,1.1vw,.74rem);
-      font-weight:700;color:#fff;text-transform:uppercase;
-      letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-      text-shadow:0 1px 4px rgba(0,0,0,.4);pointer-events:none}
-    /* pip grid: left portion, rows = admin/armory/containment top-to-bottom */
-    .ov-std .pips{
-      position:absolute;top:27%;left:2%;width:49%;height:70%;
-      display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
-      gap:2.5%;pointer-events:none}
-
-    /* ── Management overlay ──────────────────────────────────── */
-    /* Dark header block at top */
-    .ov-mgmt .hdr{
-      position:absolute;top:0;left:0;right:0;height:32%;
-      border-radius:10px 10px 0 0;pointer-events:none;
-      transition:background .3s;display:flex;flex-direction:column;
-      align-items:center;justify-content:center;gap:3%}
-    .ov-mgmt .c-role{
-      position:absolute;top:5%;left:4%;right:4%;
-      font-family:var(--sans);font-size:clamp(.38rem,1.05vw,.7rem);
-      font-weight:700;color:#fff;text-transform:uppercase;
-      letter-spacing:.5px;text-align:center;
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
-    .ov-mgmt .c-dept{
-      position:absolute;top:17%;left:4%;right:4%;
-      font-family:var(--sans);font-size:clamp(.28rem,.65vw,.44rem);
-      font-weight:400;color:rgba(255,255,255,.75);text-align:center;
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
-    /* grid: right-center below header */
-    .ov-mgmt .pips{
-      position:absolute;top:36%;left:28%;width:62%;height:55%;
-      display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
-      gap:3%;pointer-events:none}
-
-    /* ── Task Force overlay ──────────────────────────────────── */
-    .ov-tf .tint{
-      position:absolute;inset:0;border-radius:10px;
-      mix-blend-mode:multiply;opacity:.42;transition:background .3s;pointer-events:none}
-    .ov-tf .c-dept{
-      position:absolute;top:4.5%;left:10%;right:50%;
-      font-family:var(--sans);font-size:clamp(.28rem,.65vw,.44rem);
-      color:rgba(20,20,20,.85);white-space:nowrap;overflow:hidden;
-      text-overflow:ellipsis;pointer-events:none}
-    .ov-tf .c-role{
-      position:absolute;top:10%;left:10%;right:50%;
-      font-family:var(--sans);font-size:clamp(.38rem,1vw,.66rem);
-      font-weight:700;color:#1a1a1a;text-transform:uppercase;
-      letter-spacing:.3px;white-space:nowrap;overflow:hidden;
-      text-overflow:ellipsis;pointer-events:none}
-    /* grid left side */
-    .ov-tf .pips{
-      position:absolute;top:30%;left:4%;width:44%;height:64%;
-      display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
-      gap:4.5%;pointer-events:none}
-
-    /* PIP CELL */
-    /* Row 0 = admin (gear), Row 1 = armory (guns), Row 2 = containment (SCP) */
-    .pip{border-radius:16%;background:transparent;border:1.5px solid rgba(0,0,0,.1);transition:background .2s,box-shadow .2s}
-    .pip.lit{border-color:rgba(255,255,255,.2)}
-
-    /* LEGEND */
-    .legend{display:flex;gap:1rem;font-size:.65rem;color:var(--text2);font-family:var(--mono)}
-    .li{display:flex;align-items:center;gap:.32rem}
-    .ld{width:7px;height:7px;border-radius:2px}
-
-    /* ── PRESETS SECTION ─────────────────────────────────────── */
-    .presets-tabs{display:flex;gap:2px;margin-bottom:.8rem}
-    .ptab{flex:1;padding:.4rem;font-family:var(--sans);font-size:.7rem;font-weight:500;
-      background:var(--bg3);border:1px solid var(--bdr2);border-radius:5px;
-      color:var(--text2);cursor:pointer;transition:all .14s;text-align:center}
-    .ptab.active{background:var(--red);color:#fff;border-color:var(--red)}
-
-    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:.4rem}
-    .pcard{
-      background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;
-      padding:.6rem .7rem .6rem .95rem;cursor:pointer;transition:all .13s;
-      position:relative;overflow:hidden}
-    .pcard::before{content:'';position:absolute;left:0;top:0;bottom:0;
-      width:3px;background:var(--pc,var(--red))}
-    .pcard:hover{border-color:var(--pc,var(--red));background:var(--surf)}
-    .pname{font-size:.76rem;font-weight:600;margin-bottom:.14rem}
-    .pinfo{font-size:.6rem;color:var(--text2);font-family:var(--mono);line-height:1.4}
-    .ppips{display:flex;gap:2px;margin-top:.28rem;flex-wrap:wrap;align-items:center}
-    .pp{width:7px;height:7px;border-radius:2px;background:rgba(255,255,255,.1)}
-    .pp.on{background:var(--ppc,#fff)}
-    .pp-sep{width:3px}
-
-    /* Local preset controls */
-    .local-actions{display:flex;gap:.4rem;margin-bottom:.8rem}
-    .empty-local{
-      padding:1.5rem 1rem;text-align:center;
-      font-size:.72rem;color:var(--text3);font-family:var(--mono);
-      border:1px dashed var(--bdr2);border-radius:6px}
-    .del-btn{
-      position:absolute;top:4px;right:4px;width:16px;height:16px;
-      background:rgba(212,43,43,.7);border:none;border-radius:3px;
-      color:#fff;font-size:.6rem;cursor:pointer;display:none;
-      align-items:center;justify-content:center;line-height:1}
-    .pcard:hover .del-btn{display:flex}
-
-    /* modal */
-    .modal-bg{
-      display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
-      z-index:100;align-items:center;justify-content:center}
-    .modal-bg.open{display:flex}
-    .modal{
-      background:var(--bg2);border:1px solid var(--bdr2);border-radius:var(--r);
-      padding:1.4rem;width:320px;max-width:95vw}
-    .modal h3{font-size:.85rem;font-weight:600;margin-bottom:1rem;color:var(--text)}
-    .modal .field{margin-bottom:.7rem}
-    .modal-btns{display:flex;gap:.5rem;margin-top:1rem;justify-content:flex-end}
-
-    @media(max-width:1050px){.app{grid-template-columns:1fr}}
-    @media(max-width:600px){
-      .app{padding:1rem}
-      .lvrow{grid-template-columns:1fr}
-      .pgrid{grid-template-columns:1fr 1fr}
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<header>
-  <div class="logo">
-    <svg viewBox="0 0 20 20"><path d="M10 1L3 5.5v9L10 19l7-4.5v-9L10 1zm0 2.2 5.3 3.4v6.8L10 16.8 4.7 13.4V6.6z"/></svg>
-  </div>
-  <span class="htitle">Генератор ключ-карт</span>
-  <span class="hsep">/</span>
-  <span class="hsub">AmSerg Games</span>
-  <span class="hright">CKRP v1.0</span>
-</header>
-
-<div class="app">
-
-  <!-- ════ ЛЕВАЯ КОЛОНКА ════════════════════════════════ -->
-  <div class="lcol">
-
-    <div class="panel">
-      <div class="ph"><div class="pdot"></div><h2>Параметры карты</h2></div>
-      <div class="pb">
-        <div class="field"><label>ID игрока</label>
-          <input type="text" id="cardId" value="0" placeholder="Steam / Player ID"></div>
-        <div class="field"><label>Имя карты в инвентаре</label>
-          <input type="text" id="kcName" value="Ключ-Карта_Логиста" placeholder="Ключ-Карта_Логиста"></div>
-        <div class="field"><label>Департамент (на карточке)</label>
-          <input type="text" id="dept" value="Логистическая Служба" placeholder="Логистическая Служба"></div>
-        <div class="field"><label>Роль / Должность (на карточке)</label>
-          <input type="text" id="role" value="Логист" placeholder="Логист или %Role%"></div>
-        <div class="field"><label>Тип карты</label>
-          <select id="cardType">
-            <option value="KeycardCustomSite02">Стандартная карта (Site-02)</option>
-            <option value="KeycardCustomMetalCase">Карта в металлическом кейсе</option>
-            <option value="KeycardCustomTaskForce">Карта оперативника (Task Force)</option>
-            <option value="KeycardCustomManagement">Управленческая карта (Management)</option>
-          </select></div>
-        <div class="field"><label>Цвет карты</label>
-          <div class="crow">
-            <input type="color" id="cardColor" value="#528198">
-            <input type="text" id="colorHex" value="#528198" maxlength="7" placeholder="#RRGGBB">
-          </div></div>
-      </div>
+  <header>
+    <div class="logo">
+      <svg viewBox="0 0 20 20"><path d="M10 1L3 5.5v9L10 19l7-4.5v-9L10 1zm0 2.2 5.3 3.4v6.8L10 16.8 4.7 13.4V6.6z"></path></svg>
     </div>
+    <div class="title">Генератор ключ-карт</div>
+    <div class="sub">AmSerg Games</div>
+    <div class="version">CKRP v1.0</div>
+  </header>
 
-    <div class="panel">
-      <div class="ph"><div class="pdot"></div><h2>Уровни доступа</h2></div>
-      <div class="pb">
-        <div class="lvrow">
-          <div class="lvblock"><label>⚙ Администр.</label>
-            <div class="lvc">
-              <button class="lbtn" id="mAdm">−</button>
-              <input class="lnum" type="number" id="admLvl" min="0" max="3" value="0">
-              <button class="lbtn" id="pAdm">+</button>
-            </div></div>
-          <div class="lvblock"><label>🔫 Оружейная</label>
-            <div class="lvc">
-              <button class="lbtn" id="mArm">−</button>
-              <input class="lnum" type="number" id="armLvl" min="0" max="3" value="0">
-              <button class="lbtn" id="pArm">+</button>
-            </div></div>
-          <div class="lvblock"><label>☢ Содержание</label>
-            <div class="lvc">
-              <button class="lbtn" id="mCon">−</button>
-              <input class="lnum" type="number" id="conLvl" min="0" max="3" value="0">
-              <button class="lbtn" id="pCon">+</button>
-            </div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="ph"><div class="pdot"></div><h2>Команда</h2></div>
-      <div class="pb">
-        <div class="cmd" id="cmdOut"></div>
-        <div class="brow">
-          <button class="btn btn-r" id="copyBtn">
-            <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/>
-            </svg>
-            Скопировать
-          </button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ════ ПРАВАЯ КОЛОНКА ══════════════════════════════ -->
-  <div class="rcol">
-
-    <div class="stage">
-      <div class="slabel">
-        <span>ПРЕДПРОСМОТР</span>
-        <span id="stageLabel">SITE-02 / СТАНДАРТНАЯ</span>
-      </div>
-      <div class="cw" id="cardWrap"></div>
-      <div class="legend">
-        <div class="li"><div class="ld" style="background:#d4aa4a"></div>⚙ Администр.</div>
-        <div class="li"><div class="ld" style="background:#4a8ed4"></div>🔫 Оружейная</div>
-        <div class="li"><div class="ld" style="background:#c0181a"></div>☢ Содержание</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="ph"><div class="pdot"></div><h2>Шаблоны</h2></div>
-      <div class="pb">
-        <div class="presets-tabs">
-          <button class="ptab active" id="tabServer" onclick="switchTab('server')">Серверные</button>
-          <button class="ptab" id="tabLocal" onclick="switchTab('local')">Мои шаблоны</button>
-        </div>
-
-        <!-- Server presets -->
-        <div id="paneServer">
-          <div class="pgrid" id="serverGrid"></div>
-        </div>
-
-        <!-- Local presets -->
-        <div id="paneLocal" style="display:none">
-          <div class="local-actions">
-            <button class="btn btn-r" onclick="openSaveModal()">
-              <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
-              Сохранить текущую
-            </button>
-            <button class="btn btn-g" onclick="clearLocalPresets()">Очистить все</button>
+  <main class="app">
+    <section class="col">
+      <div class="panel">
+        <div class="ph"><div class="dot"></div><h2>Параметры карты</h2></div>
+        <div class="pb">
+          <div class="field"><label for="cardId">ID игрока</label><input id="cardId" type="text" value="0" placeholder="Steam / Player ID"></div>
+          <div class="field"><label for="kcName">Имя карты в инвентаре</label><input id="kcName" type="text" value="Ключ-Карта_Логиста"></div>
+          <div class="field"><label for="dept">Департамент</label><input id="dept" type="text" value="Логистическая Служба"></div>
+          <div class="field"><label for="role">Роль / Должность</label><input id="role" type="text" value="Логист"></div>
+          <div class="field">
+            <label for="cardType">Тип карты</label>
+            <select id="cardType">
+              <option value="KeycardCustomSite02">Стандартная карта (Site-02)</option>
+              <option value="KeycardCustomMetalCase">Карта в металлическом кейсе</option>
+              <option value="KeycardCustomTaskForce">Карта оперативника (Task Force)</option>
+              <option value="KeycardCustomManagement">Управленческая карта (Management)</option>
+            </select>
           </div>
-          <div class="pgrid" id="localGrid"></div>
-          <div class="empty-local" id="localEmpty">Нет сохранённых шаблонов.<br>Настройте карточку и нажмите «Сохранить текущую».</div>
+          <div class="field">
+            <label for="colorHex">Цвет карты</label>
+            <div class="color-row">
+              <input id="cardColor" type="color" value="#528198">
+              <input id="colorHex" type="text" value="#528198" maxlength="7" placeholder="#RRGGBB">
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-  </div>
-</div>
-
-<!-- SAVE MODAL -->
-<div class="modal-bg" id="saveModal">
-  <div class="modal">
-    <h3>Сохранить шаблон</h3>
-    <div class="field"><label>Название шаблона</label>
-      <input type="text" id="presetNameInput" placeholder="Например: Мой логист" maxlength="40">
-    </div>
-    <div class="modal-btns">
-      <button class="btn btn-g" onclick="closeSaveModal()">Отмена</button>
-      <button class="btn btn-r" onclick="saveLocalPreset()">Сохранить</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ── CONSTANTS ────────────────────────────────────────────────────────────────
-const IMAGES = {
-  KeycardCustomSite02:     'Keycard_CustomSite02.png',
-  KeycardCustomMetalCase:  'Keycard_CustomSite02.png',
-  KeycardCustomTaskForce:  'Keycard_Operative.png',
-  KeycardCustomManagement: 'Custom_Managment.png',
-};
-const TYPE_LABELS = {
-  KeycardCustomSite02:     'SITE-02 / СТАНДАРТНАЯ',
-  KeycardCustomMetalCase:  'METAL CASE / КЕЙС',
-  KeycardCustomTaskForce:  'TASK FORCE / ОПЕРАТИВНИК',
-  KeycardCustomManagement: 'MANAGEMENT / УПРАВЛЕНИЕ',
-};
-// Pip rows top→bottom: [0]=Admin(gear), [1]=Armory(guns), [2]=Containment(SCP)
-const ROW_COLORS = ['#d4aa4a', '#4a8ed4', '#c0181a'];
-
-// Server-defined presets (from Atlas HRP)
-const SERVER_PRESETS = [
-  { name:'Директор участка',  dept:'Административная служба',  role:'Директор Участка',    type:'KeycardCustomMetalCase',  color:'#960030', adm:3,arm:3,con:3 },
-  { name:'Рук. исследований', dept:'Научная служба',           role:'Руководитель',         type:'KeycardCustomMetalCase',  color:'#c89020', adm:3,arm:1,con:3 },
-  { name:'Ст. научный сотр.', dept:'Научная служба',           role:'Ст. Научный Сотр.',    type:'KeycardCustomSite02',     color:'#c89020', adm:1,arm:0,con:3 },
-  { name:'Научный сотрудник', dept:'Научная служба',           role:'Научный Сотрудник',    type:'KeycardCustomSite02',     color:'#c89020', adm:1,arm:0,con:2 },
-  { name:'Куратор SCP',       dept:'Научная служба',           role:'Куратор SCP-000',      type:'KeycardCustomSite02',     color:'#c89020', adm:1,arm:2,con:3 },
-  { name:'Командир МОГ',      dept:'Мобильная Оперативная Группа', role:'Командир МОГ',    type:'KeycardCustomTaskForce',  color:'#1e3a8a', adm:3,arm:3,con:3 },
-  { name:'Оперативник МОГ',   dept:'Мобильная Оперативная Группа', role:'Оперативник',     type:'KeycardCustomTaskForce',  color:'#1e3a8a', adm:1,arm:2,con:2 },
-  { name:'Нач. охраны',       dept:'Служба безопасности',      role:'Начальник Охраны',     type:'KeycardCustomSite02',     color:'#4a6741', adm:2,arm:3,con:2 },
-  { name:'Охранник',          dept:'Служба безопасности',      role:'Рядовой',              type:'KeycardCustomSite02',     color:'#4a6741', adm:0,arm:2,con:1 },
-  { name:'Инженер',           dept:'Инженерно-технический отд.',role:'Инженер',             type:'KeycardCustomSite02',     color:'#00ad76', adm:1,arm:0,con:3 },
-  { name:'IT-специалист',     dept:'Инженерно-технический отд.',role:'IT-Специалист',        type:'KeycardCustomSite02',     color:'#00ad76', adm:1,arm:0,con:2 },
-  { name:'Логист',            dept:'Логистическая служба',     role:'Логист',               type:'KeycardCustomSite02',     color:'#0048ad', adm:0,arm:0,con:1 },
-  { name:'Менеджер зон',      dept:'Административная служба',  role:'Менеджер Зон Содержания', type:'KeycardCustomManagement', color:'#2c5f5f', adm:3,arm:1,con:2 },
-];
-
-// ── DOM REFS ─────────────────────────────────────────────────────────────────
-const $ = id => document.getElementById(id);
-const clamp = (v,a,b) => Math.min(b,Math.max(a,isNaN(v)?0:v));
-const validHex = h => /^#[0-9a-fA-F]{6}$/.test(h);
-const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const fmtCmd = s => s.replace(/ /g,'_');
-
-// ── STEPPERS ──────────────────────────────────────────────────────────────────
-function stepper(el,mId,pId){
-  $(mId).onclick=()=>{el.value=clamp(+el.value-1,0,3);update()};
-  $(pId).onclick=()=>{el.value=clamp(+el.value+1,0,3);update()};
-  el.addEventListener('input',update);
-}
-stepper($('admLvl'),'mAdm','pAdm');
-stepper($('armLvl'),'mArm','pArm');
-stepper($('conLvl'),'mCon','pCon');
-
-const cardColor=$('cardColor'), colorHex=$('colorHex');
-cardColor.addEventListener('input',()=>{colorHex.value=cardColor.value;update()});
-colorHex.addEventListener('input',()=>{if(validHex(colorHex.value))cardColor.value=colorHex.value;update()});
-['cardId','kcName','dept','role','cardType'].forEach(id=>$(id).addEventListener('input',update));
-
-// ── BUILD PIPS ────────────────────────────────────────────────────────────────
-// rows: [adm, arm, con] top to bottom
-function buildPips(adm,arm,con){
-  const levels=[adm,arm,con];
-  let h='';
-  for(let r=0;r<3;r++){
-    for(let c=0;c<3;c++){
-      const lit=c<levels[r];
-      const col=ROW_COLORS[r];
-      h+=lit
-        ?`<div class="pip lit" style="background:${col};box-shadow:0 0 5px ${col}88"></div>`
-        :`<div class="pip"></div>`;
-    }
-  }
-  return h;
-}
-
-// ── BUILD CARD HTML ───────────────────────────────────────────────────────────
-function buildCard(type,color,dept,role,adm,arm,con){
-  const src=IMAGES[type]||IMAGES.KeycardCustomSite02;
-  const d=esc(dept), r=esc(role);
-  const p=buildPips(adm,arm,con);
-
-  if(type==='KeycardCustomTaskForce'){
-    return `<img class="cb" src="${src}" alt="карта">
-    <div class="ov-tf">
-      <div class="tint" style="background:${color}"></div>
-      <div class="c-dept">${d}</div>
-      <div class="c-role">${r}</div>
-      <div class="pips">${p}</div>
-    </div>`;
-  }
-  if(type==='KeycardCustomManagement'){
-    return `<img class="cb" src="${src}" alt="карта">
-    <div class="ov-mgmt">
-      <div class="hdr" style="background:${color}"></div>
-      <div class="c-role">${r}</div>
-      <div class="c-dept">${d}</div>
-      <div class="pips">${p}</div>
-    </div>`;
-  }
-  // Site02 / MetalCase
-  return `<img class="cb" src="${src}" alt="карта">
-  <div class="ov-std">
-    <div class="stripe" style="background:${color}"></div>
-    <div class="c-dept">${d}</div>
-    <div class="c-role">${r}</div>
-    <div class="pips">${p}</div>
-  </div>`;
-}
-
-// ── MAIN UPDATE ───────────────────────────────────────────────────────────────
-function update(){
-  const type  = $('cardType').value;
-  const name  = $('kcName').value  || 'Ключ-Карта';
-  const deptV = $('dept').value    || 'Департамент';
-  const roleV = $('role').value    || 'Роль';
-  const color = validHex(colorHex.value)?colorHex.value:cardColor.value;
-  const adm   = clamp(+$('admLvl').value,0,3);
-  const arm   = clamp(+$('armLvl').value,0,3);
-  const con   = clamp(+$('conLvl').value,0,3);
-  const id    = $('cardId').value  || '0';
-
-  // Command — args: type containment admin armory dept role color name id
-  $('cmdOut').textContent=
-    `ckrp add ${type} ${con} ${adm} ${arm} ${fmtCmd(deptV)} ${fmtCmd(roleV)} ${color} ${fmtCmd(name)} ${id}`;
-
-  $('cardWrap').innerHTML=buildCard(type,color,deptV,roleV,adm,arm,con);
-  $('stageLabel').textContent=TYPE_LABELS[type]||type;
-}
-
-// ── COPY ──────────────────────────────────────────────────────────────────────
-$('copyBtn').addEventListener('click',async()=>{
-  const text=$('cmdOut').textContent;
-  try{await navigator.clipboard.writeText(text)}
-  catch{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t)}
-  const b=$('copyBtn');
-  b.textContent='✓  Скопировано!';b.className='btn btn-ok';
-  setTimeout(()=>{
-    b.innerHTML=`<svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg> Скопировать`;
-    b.className='btn btn-r';
-  },2000);
-});
-
-// ── PRESET CARD HTML ──────────────────────────────────────────────────────────
-function makePipDots(lvl,col){
-  return Array.from({length:3},(_,i)=>
-    `<div class="pp${i<lvl?' on':''}" ${i<lvl?`style="--ppc:${col}"`:''}></div>`
-  ).join('');
-}
-function presetCardHTML(p, isLocal=false, idx=null){
-  const delBtn=isLocal?`<button class="del-btn" onclick="deleteLocalPreset(${idx},event)" title="Удалить">✕</button>`:'';
-  return `
-    <div class="pcard" style="--pc:${p.color}" onclick="applyPreset(${isLocal?'null':JSON.stringify(p).replace(/"/g,"'")},${isLocal?idx:'null'})">
-      ${delBtn}
-      <div class="pname">${esc(p.name)}</div>
-      <div class="pinfo">${esc((p.dept||'').substring(0,22))}</div>
-      <div class="ppips">
-        ${makePipDots(p.adm,'#d4aa4a')}<div class="pp-sep"></div>
-        ${makePipDots(p.arm,'#4a8ed4')}<div class="pp-sep"></div>
-        ${makePipDots(p.con,'#c0181a')}
+      <div class="panel">
+        <div class="ph"><div class="dot"></div><h2>Уровни доступа</h2></div>
+        <div class="pb">
+          <div class="lv-grid">
+            <div class="field">
+              <label for="admLvl">⚙ Администр.</label>
+              <div class="lv-control"><button id="admMinus">−</button><input id="admLvl" type="number" min="0" max="3" value="0"><button id="admPlus">+</button></div>
+            </div>
+            <div class="field">
+              <label for="armLvl">🔫 Оружейная</label>
+              <div class="lv-control"><button id="armMinus">−</button><input id="armLvl" type="number" min="0" max="3" value="0"><button id="armPlus">+</button></div>
+            </div>
+            <div class="field">
+              <label for="conLvl">☢ Содержание</label>
+              <div class="lv-control"><button id="conMinus">−</button><input id="conLvl" type="number" min="0" max="3" value="0"><button id="conPlus">+</button></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>`;
-}
 
-// ── APPLY PRESET ─────────────────────────────────────────────────────────────
-function applyPreset(pObj, localIdx){
-  const p = pObj || getLocalPresets()[localIdx];
-  $('cardType').value  = p.type;
-  $('kcName').value    = p.kcName || (p.role+' Карта');
-  $('dept').value      = p.dept;
-  $('role').value      = p.role;
-  cardColor.value      = p.color;
-  colorHex.value       = p.color;
-  $('admLvl').value    = p.adm;
-  $('armLvl').value    = p.arm;
-  $('conLvl').value    = p.con;
-  update();
-}
+      <div class="panel">
+        <div class="ph"><div class="dot"></div><h2>Команда</h2></div>
+        <div class="pb">
+          <div id="cmdOut" class="cmd"></div>
+          <div class="row-btn">
+            <button id="copyBtn" class="btn btn-red">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"></path><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"></path></svg>
+              Скопировать
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-// ── RENDER SERVER PRESETS ─────────────────────────────────────────────────────
-function renderServerPresets(){
-  $('serverGrid').innerHTML = SERVER_PRESETS.map(p=>
-    presetCardHTML(p,false)
-  ).join('');
-}
+    <section class="col">
+      <div class="stage">
+        <div class="stage-head"><span>ПРЕДПРОСМОТР</span><span id="stageLabel">SITE-02 / СТАНДАРТНАЯ</span></div>
+        <div id="cardWrap" class="card-wrap"></div>
+        <div class="legend">
+          <span><i style="background:#d4aa4a"></i>⚙ Администр.</span>
+          <span><i style="background:#4a8ed4"></i>🔫 Оружейная</span>
+          <span><i style="background:#c0181a"></i>☢ Содержание</span>
+        </div>
+      </div>
 
-// onclick for server (inline obj gets quotes mangled, use data approach)
-window.applyPreset=function(pObj,localIdx){
-  const p = pObj!==null ? pObj : getLocalPresets()[localIdx];
-  $('cardType').value  = p.type;
-  $('kcName').value    = p.kcName || p.role.replace(/ /g,'_');
-  $('dept').value      = p.dept;
-  $('role').value      = p.role;
-  cardColor.value      = p.color;
-  colorHex.value       = p.color;
-  $('admLvl').value    = p.adm;
-  $('armLvl').value    = p.arm;
-  $('conLvl').value    = p.con;
-  update();
-};
+      <div class="panel">
+        <div class="ph"><div class="dot"></div><h2>Шаблоны</h2></div>
+        <div class="pb">
+          <div class="tabs">
+            <button class="tab active" data-tab="server">Серверные</button>
+            <button class="tab" data-tab="local">Мои шаблоны</button>
+          </div>
+          <section id="serverPane">
+            <div id="serverGrid" class="preset-grid"></div>
+          </section>
+          <section id="localPane" style="display:none">
+            <div class="preset-actions">
+              <button id="savePresetBtn" class="btn btn-red">Сохранить текущую</button>
+              <button id="clearPresetsBtn" class="btn btn-ghost">Очистить все</button>
+            </div>
+            <div id="localGrid" class="preset-grid"></div>
+            <div id="localEmpty" class="empty">Нет сохраненных шаблонов.<br>Настройте карточку и нажмите «Сохранить текущую».</div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
 
-function renderServerPresetsClean(){
-  const grid=$('serverGrid');
-  grid.innerHTML='';
-  SERVER_PRESETS.forEach(p=>{
-    const el=document.createElement('div');
-    el.className='pcard';
-    el.style.setProperty('--pc',p.color);
-    el.innerHTML=`
-      <div class="pname">${esc(p.name)}</div>
-      <div class="pinfo">${esc(p.dept.substring(0,24))}</div>
-      <div class="ppips">
-        ${makePipDots(p.adm,'#d4aa4a')}<div class="pp-sep"></div>
-        ${makePipDots(p.arm,'#4a8ed4')}<div class="pp-sep"></div>
-        ${makePipDots(p.con,'#c0181a')}
-      </div>`;
-    el.addEventListener('click',()=>window.applyPreset(p,null));
-    grid.appendChild(el);
-  });
-}
+  <div id="modalBg" class="modal-bg">
+    <div class="modal">
+      <h3>Сохранить шаблон</h3>
+      <div class="field"><label for="presetNameInput">Название шаблона</label><input id="presetNameInput" type="text" maxlength="40" placeholder="Например: Мой логист"></div>
+      <div class="modal-foot">
+        <button id="cancelSaveBtn" class="btn btn-ghost">Отмена</button>
+        <button id="confirmSaveBtn" class="btn btn-red">Сохранить</button>
+      </div>
+    </div>
+  </div>
 
-// ── LOCAL PRESETS (localStorage) ──────────────────────────────────────────────
-const LS_KEY='ckrp_local_presets';
-function getLocalPresets(){
-  try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]')}catch{return[]}
-}
-function saveLocalPresetsArr(arr){
-  localStorage.setItem(LS_KEY,JSON.stringify(arr));
-}
-
-function renderLocalPresets(){
-  const arr=getLocalPresets();
-  const grid=$('localGrid');
-  const empty=$('localEmpty');
-  grid.innerHTML='';
-  if(arr.length===0){empty.style.display='block';return}
-  empty.style.display='none';
-  arr.forEach((p,i)=>{
-    const el=document.createElement('div');
-    el.className='pcard';
-    el.style.setProperty('--pc',p.color);
-    // delete btn
-    const del=document.createElement('button');
-    del.className='del-btn';
-    del.textContent='✕';
-    del.title='Удалить';
-    del.addEventListener('click',e=>{e.stopPropagation();deleteLocal(i)});
-    el.innerHTML=`
-      <div class="pname">${esc(p.name)}</div>
-      <div class="pinfo">${esc((p.dept||'').substring(0,24))}</div>
-      <div class="ppips">
-        ${makePipDots(p.adm,'#d4aa4a')}<div class="pp-sep"></div>
-        ${makePipDots(p.arm,'#4a8ed4')}<div class="pp-sep"></div>
-        ${makePipDots(p.con,'#c0181a')}
-      </div>`;
-    el.appendChild(del);
-    el.addEventListener('click',()=>window.applyPreset(p,null));
-    grid.appendChild(el);
-  });
-}
-function deleteLocal(idx){
-  const arr=getLocalPresets();
-  arr.splice(idx,1);
-  saveLocalPresetsArr(arr);
-  renderLocalPresets();
-}
-window.deleteLocalPreset=(idx,e)=>{if(e)e.stopPropagation();deleteLocal(idx)};
-
-// ── SAVE MODAL ────────────────────────────────────────────────────────────────
-window.openSaveModal=()=>{
-  $('presetNameInput').value=$('role').value||'';
-  $('saveModal').classList.add('open');
-  $('presetNameInput').focus();
-};
-window.closeSaveModal=()=>$('saveModal').classList.remove('open');
-window.saveLocalPreset=()=>{
-  const nameVal=$('presetNameInput').value.trim();
-  if(!nameVal)return;
-  const color=validHex(colorHex.value)?colorHex.value:cardColor.value;
-  const preset={
-    name:nameVal,
-    dept:$('dept').value,
-    role:$('role').value,
-    kcName:$('kcName').value,
-    type:$('cardType').value,
-    color,
-    adm:clamp(+$('admLvl').value,0,3),
-    arm:clamp(+$('armLvl').value,0,3),
-    con:clamp(+$('conLvl').value,0,3),
-  };
-  const arr=getLocalPresets();
-  arr.push(preset);
-  saveLocalPresetsArr(arr);
-  renderLocalPresets();
-  closeSaveModal();
-};
-window.clearLocalPresets=()=>{
-  if(!confirm('Удалить все локальные шаблоны?'))return;
-  saveLocalPresetsArr([]);
-  renderLocalPresets();
-};
-
-// Close modal on backdrop click
-$('saveModal').addEventListener('click',e=>{if(e.target===$('saveModal'))closeSaveModal()});
-// Enter to save
-$('presetNameInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveLocalPreset()});
-
-// ── TABS ──────────────────────────────────────────────────────────────────────
-window.switchTab=(tab)=>{
-  $('tabServer').classList.toggle('active',tab==='server');
-  $('tabLocal').classList.toggle('active',tab==='local');
-  $('paneServer').style.display=tab==='server'?'':'none';
-  $('paneLocal').style.display=tab==='local'?'':'none';
-  if(tab==='local')renderLocalPresets();
-};
-
-// ── INIT ──────────────────────────────────────────────────────────────────────
-renderServerPresetsClean();
-update();
-</script>
+  <script src="app.js"></script>
 </body>
 </html>
