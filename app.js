@@ -14,6 +14,14 @@ const TYPE_LABELS = {
 
 const ROW_COLORS = ["#d4aa4a", "#4a8ed4", "#c0181a"];
 const LS_KEY = "ckrp_local_presets_v2";
+const CAL_KEY = "ckrp_grid_calibration_v1";
+
+const DEFAULT_CALIBRATION = {
+  KeycardCustomSite02: { left: 2.2, top: 27.8, width: 49.0, height: 68.0, gap: 2.6 },
+  KeycardCustomMetalCase: { left: 2.2, top: 27.8, width: 49.0, height: 68.0, gap: 2.6 },
+  KeycardCustomTaskForce: { left: 3.6, top: 42.8, width: 39.8, height: 49.8, gap: 4.2 },
+  KeycardCustomManagement: { left: 21.2, top: 40.1, width: 41.8, height: 49.0, gap: 3.2 }
+};
 
 const SERVER_PRESETS = [
   { name: "Директор участка", dept: "Административная служба", role: "Директор Участка", type: "KeycardCustomMetalCase", color: "#960030", adm: 3, arm: 3, con: 3 },
@@ -58,8 +66,19 @@ const refs = {
   localPane: $("localPane"),
   serverPane: $("serverPane"),
   modalBg: $("modalBg"),
-  presetNameInput: $("presetNameInput")
+  presetNameInput: $("presetNameInput"),
+  calEnabled: $("calEnabled"),
+  calControls: $("calControls"),
+  calType: $("calType"),
+  calLeft: $("calLeft"),
+  calTop: $("calTop"),
+  calWidth: $("calWidth"),
+  calHeight: $("calHeight"),
+  calGap: $("calGap"),
+  calResetBtn: $("calResetBtn")
 };
+
+let calibration = readCalibration();
 
 function makeStepper(input, minusId, plusId) {
   $(minusId).addEventListener("click", () => {
@@ -105,6 +124,61 @@ function buildPips(adm, arm, con) {
   return html;
 }
 
+function readCalibration() {
+  try {
+    const value = JSON.parse(localStorage.getItem(CAL_KEY) || "{}");
+    return {
+      enabled: Boolean(value.enabled),
+      values: {
+        ...DEFAULT_CALIBRATION,
+        ...(value.values || {})
+      }
+    };
+  } catch {
+    return {
+      enabled: false,
+      values: { ...DEFAULT_CALIBRATION }
+    };
+  }
+}
+
+function writeCalibration() {
+  localStorage.setItem(CAL_KEY, JSON.stringify(calibration));
+}
+
+function pipsStyleFor(type) {
+  const v = calibration.enabled
+    ? (calibration.values[type] || DEFAULT_CALIBRATION[type] || DEFAULT_CALIBRATION.KeycardCustomSite02)
+    : (DEFAULT_CALIBRATION[type] || DEFAULT_CALIBRATION.KeycardCustomSite02);
+  return `left:${v.left}%;top:${v.top}%;width:${v.width}%;height:${v.height}%;gap:${v.gap}%;`;
+}
+
+function loadCalibrationControls() {
+  refs.calEnabled.checked = calibration.enabled;
+  refs.calControls.style.display = calibration.enabled ? "" : "none";
+  const t = refs.calType.value || refs.cardType.value || "KeycardCustomSite02";
+  const v = calibration.values[t] || DEFAULT_CALIBRATION[t];
+  refs.calType.value = t;
+  refs.calLeft.value = v.left;
+  refs.calTop.value = v.top;
+  refs.calWidth.value = v.width;
+  refs.calHeight.value = v.height;
+  refs.calGap.value = v.gap;
+}
+
+function saveCalibrationFromInputs() {
+  const t = refs.calType.value;
+  calibration.values[t] = {
+    left: Number(refs.calLeft.value) || 0,
+    top: Number(refs.calTop.value) || 0,
+    width: Number(refs.calWidth.value) || 0,
+    height: Number(refs.calHeight.value) || 0,
+    gap: Number(refs.calGap.value) || 0
+  };
+  writeCalibration();
+  update();
+}
+
 function cardHtml(st) {
   const src = IMAGES[st.type] || IMAGES.KeycardCustomSite02;
   const pips = buildPips(st.adm, st.arm, st.con);
@@ -116,7 +190,7 @@ function cardHtml(st) {
       <img class="card-base" src="${src}" alt="TaskForce">
       <div class="ov ov-tf">
         <div class="tint" style="background:${st.color}"></div>
-        <div class="pips">${pips}</div>
+        <div class="pips" style="${pipsStyleFor(st.type)}">${pips}</div>
       </div>
     `;
   }
@@ -128,7 +202,7 @@ function cardHtml(st) {
         <div class="bar" style="background:${st.color}"></div>
         <div class="role">${role}</div>
         <div class="dept">${dept}</div>
-        <div class="pips">${pips}</div>
+        <div class="pips" style="${pipsStyleFor(st.type)}">${pips}</div>
       </div>
     `;
   }
@@ -140,7 +214,7 @@ function cardHtml(st) {
       <div class="bar" style="background:${st.color}"></div>
       <div class="dept">${dept}</div>
       <div class="role">${role}</div>
-      <div class="pips">${pips}</div>
+      <div class="pips" style="${pipsStyleFor(st.type)}">${pips}</div>
     </div>
   `;
 }
@@ -353,8 +427,32 @@ function bindEvents() {
       savePreset();
     }
   });
+
+  refs.calEnabled.addEventListener("change", () => {
+    calibration.enabled = refs.calEnabled.checked;
+    refs.calControls.style.display = calibration.enabled ? "" : "none";
+    writeCalibration();
+    update();
+  });
+
+  refs.calType.addEventListener("change", loadCalibrationControls);
+  [refs.calLeft, refs.calTop, refs.calWidth, refs.calHeight, refs.calGap].forEach((el) => {
+    el.addEventListener("input", saveCalibrationFromInputs);
+  });
+
+  refs.calResetBtn.addEventListener("click", () => {
+    calibration = {
+      enabled: false,
+      values: { ...DEFAULT_CALIBRATION }
+    };
+    writeCalibration();
+    loadCalibrationControls();
+    update();
+  });
 }
 
 bindEvents();
 renderServerPresets();
+refs.calType.value = refs.cardType.value;
+loadCalibrationControls();
 update();
