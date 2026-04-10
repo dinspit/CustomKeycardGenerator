@@ -341,14 +341,14 @@ input[type="color"] {
 .ov-std .dept {
   top: 3.8%;
   color: rgba(255, 255, 255, 0.86);
-  font-size: clamp(7px, 1.6vw, 10px);
-  font-weight: 500;
+  font-size: clamp(9px, 1.9vw, 13px);
+  font-weight: 600;
 }
 
 .ov-std .role {
   top: 10%;
   color: #fff;
-  font-size: clamp(12px, 2.8vw, 18px);
+  font-size: clamp(16px, 3.4vw, 24px);
   font-weight: 700;
   text-transform: uppercase;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
@@ -365,29 +365,30 @@ input[type="color"] {
 
 .ov-mgmt .dept, .ov-mgmt .role {
   position: absolute;
-  left: 1.8%;
-  width: 16.8%;
+  left: 2.2%;
+  width: 14.6%;
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
   color: #fff;
-  transform: rotate(-90deg);
-  transform-origin: center;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
 }
 
 .ov-mgmt .role {
-  top: 21.8%;
-  font-size: clamp(11px, 2vw, 14px);
+  top: 19%;
+  font-size: clamp(14px, 2.7vw, 20px);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 
 .ov-mgmt .dept {
-  top: 8.2%;
+  top: 4%;
   color: rgba(255, 255, 255, 0.82);
-  font-size: clamp(8px, 1.35vw, 10px);
+  font-size: clamp(10px, 1.8vw, 14px);
 }
 
 .ov-tf .tint {
@@ -405,7 +406,7 @@ input[type="color"] {
 }
 
 .pip {
-  width: 70%;
+  width: 84%;
   aspect-ratio: 1 / 1;
   justify-self: center;
   align-self: center;

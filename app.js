@@ -15,10 +15,10 @@ const TYPE_LABELS = {
 const ROW_COLORS = ["#d4aa4a", "#4a8ed4", "#c0181a"];
 const LS_KEY = "ckrp_local_presets_v2";
 const PIP_LAYOUT = {
-  KeycardCustomSite02: { left: 1.4, top: 29.8, width: 44.8, height: 63.8, gap: 2.7 },
-  KeycardCustomMetalCase: { left: 1.4, top: 29.8, width: 44.8, height: 63.8, gap: 2.7 },
-  KeycardCustomTaskForce: { left: 3.8, top: 42.9, width: 39.2, height: 49.1, gap: 4.0 },
-  KeycardCustomManagement: { left: 1.9, top: 40.3, width: 45.4, height: 49.2, gap: 3.0 }
+  KeycardCustomSite02: { left: 3.1, top: 30.3, width: 42.4, height: 65.3, gap: 11.0 },
+  KeycardCustomMetalCase: { left: 3.1, top: 30.3, width: 42.4, height: 65.3, gap: 11.0 },
+  KeycardCustomTaskForce: { left: 3.5, top: 44.3, width: 31.0, height: 50.0, gap: 13.5 },
+  KeycardCustomManagement: { left: 22.8, top: 48.9, width: 29.1, height: 45.9, gap: 15.0 }
 };
 
 const SERVER_PRESETS = [
@@ -94,7 +94,7 @@ function stateFromInputs() {
     id: refs.cardId.value.trim() || "0",
     kcName: refs.kcName.value.trim() || "Ключ-Карта",
     dept: refs.dept.value.trim() || "Департамент",
-    role: refs.role.value.trim() || "Роль"
+    role: refs.role.value.trim() || "%Role%"
   };
 }
 
