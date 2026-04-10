@@ -365,30 +365,31 @@ input[type="color"] {
 
 .ov-mgmt .dept, .ov-mgmt .role {
   position: absolute;
-  left: 2.2%;
-  width: 14.6%;
+  left: 2.8%;
+  width: 14%;
+  height: 42%;
   text-align: center;
-  white-space: normal;
+  white-space: nowrap;
   overflow: visible;
   text-overflow: clip;
   color: #fff;
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  transform: rotate(180deg);
+  transform: none;
 }
 
 .ov-mgmt .role {
-  top: 19%;
-  font-size: clamp(14px, 2.7vw, 20px);
+  top: 50%;
+  font-size: clamp(13px, 2.5vw, 18px);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 
 .ov-mgmt .dept {
-  top: 4%;
+  top: 6%;
   color: rgba(255, 255, 255, 0.82);
-  font-size: clamp(10px, 1.8vw, 14px);
+  font-size: clamp(9px, 1.5vw, 12px);
 }
 
 .ov-tf .tint {
@@ -406,7 +407,7 @@ input[type="color"] {
 }
 
 .pip {
-  width: 84%;
+  width: 74%;
   aspect-ratio: 1 / 1;
   justify-self: center;
   align-self: center;
