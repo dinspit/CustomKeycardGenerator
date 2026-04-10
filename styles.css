@@ -365,8 +365,8 @@ input[type="color"] {
 
 .ov-mgmt .dept, .ov-mgmt .role {
   position: absolute;
-  left: 2.8%;
-  width: 14%;
+  left: 4.2%;
+  width: 10.5%;
   height: 42%;
   text-align: center;
   white-space: nowrap;
@@ -375,11 +375,12 @@ input[type="color"] {
   color: #fff;
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  transform: none;
+  transform: rotate(180deg);
+  transform-origin: center;
 }
 
 .ov-mgmt .role {
-  top: 50%;
+  top: 53%;
   font-size: clamp(13px, 2.5vw, 18px);
   font-weight: 700;
   text-transform: uppercase;
@@ -387,7 +388,7 @@ input[type="color"] {
 }
 
 .ov-mgmt .dept {
-  top: 6%;
+  top: 7.5%;
   color: rgba(255, 255, 255, 0.82);
   font-size: clamp(9px, 1.5vw, 12px);
 }
