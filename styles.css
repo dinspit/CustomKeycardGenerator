@@ -1,16 +1,17 @@
 :root {
-  --bg: #f3f1ec;
-  --panel: #fffcf7;
-  --ink: #1a1c1e;
-  --muted: #5c636b;
-  --line: #d7d2c8;
-  --line-strong: #b9b2a4;
-  --accent: #b42318;
-  --ok: #1f6b3a;
-  --ok-bg: #e7f3eb;
+  --bg: #101214;
+  --panel: #171a1d;
+  --panel-2: #1d2126;
+  --ink: #e8eaed;
+  --muted: #8b9198;
+  --line: #2a2f35;
+  --line-strong: #3a4149;
+  --accent: #d6453d;
+  --ok: #6ddea0;
+  --ok-bg: #163225;
   --con: #c0181a;
-  --arm: #2f74b8;
-  --adm: #c49a2c;
+  --arm: #4a8ed4;
+  --adm: #d4aa4a;
   --sans: "Manrope", sans-serif;
   --mono: "JetBrains Mono", monospace;
 }
@@ -25,9 +26,7 @@ body {
   min-height: 100vh;
   font-family: var(--sans);
   color: var(--ink);
-  background:
-    linear-gradient(180deg, #efece5 0%, var(--bg) 180px),
-    var(--bg);
+  background: var(--bg);
 }
 
 button,
@@ -41,7 +40,7 @@ select {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 18px 24px;
+  padding: 16px 22px;
   border-bottom: 1px solid var(--line);
   background: var(--panel);
 }
@@ -53,21 +52,21 @@ select {
 }
 
 .brand-mark {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--line-strong);
   background: var(--ink);
-  color: #fff;
+  color: #111;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 
 .brand-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -86,10 +85,10 @@ select {
 .layout {
   max-width: 1180px;
   margin: 0 auto;
-  padding: 22px;
+  padding: 20px;
   display: grid;
   grid-template-columns: 340px 1fr;
-  gap: 18px;
+  gap: 16px;
   align-items: start;
 }
 
@@ -97,13 +96,13 @@ select {
 .main {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .block {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 16px;
+  padding: 14px;
 }
 
 .block h2,
@@ -158,7 +157,7 @@ select {
   width: 100%;
   height: 36px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--panel-2);
   color: var(--ink);
   padding: 0 10px;
   font-family: var(--mono);
@@ -168,7 +167,7 @@ select {
 
 input:focus,
 select:focus {
-  border-color: var(--ink);
+  border-color: #6b7480;
 }
 
 .color-line {
@@ -181,7 +180,7 @@ input[type="color"] {
   width: 42px;
   height: 36px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--panel-2);
   padding: 3px;
 }
 
@@ -202,7 +201,7 @@ input[type="color"] {
   display: grid;
   grid-template-columns: 32px 44px 32px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--panel-2);
 }
 
 .step button {
@@ -213,7 +212,7 @@ input[type="color"] {
 }
 
 .step button:hover {
-  background: #f0ebe2;
+  background: #262b31;
   color: var(--ink);
 }
 
@@ -223,6 +222,7 @@ input[type="color"] {
   text-align: center;
   font-weight: 600;
   color: var(--ink);
+  background: transparent;
 }
 
 .dot {
@@ -243,8 +243,8 @@ input[type="color"] {
   margin-bottom: 10px;
   padding: 12px;
   border: 1px solid var(--line);
-  background: #111314;
-  color: #d7ffe4;
+  background: #0b0d0f;
+  color: #9be7b4;
   font-family: var(--mono);
   font-size: 12px;
   line-height: 1.55;
@@ -268,11 +268,11 @@ input[type="color"] {
 .btn-main {
   width: 100%;
   background: var(--ink);
-  color: #fff;
+  color: #111;
 }
 
 .btn-main:hover {
-  background: #2a2e33;
+  filter: brightness(0.92);
 }
 
 .btn-ghost {
@@ -282,13 +282,13 @@ input[type="color"] {
 }
 
 .btn-ghost:hover {
-  background: #f0ebe2;
+  background: #22272d;
 }
 
 .btn-ok {
   width: 100%;
   background: var(--ok-bg);
-  border-color: #9ec9ad;
+  border-color: #2f6a48;
   color: var(--ok);
 }
 
@@ -303,7 +303,7 @@ input[type="color"] {
   max-width: 540px;
   position: relative;
   border: 1px solid var(--line);
-  background: #e8e4db;
+  background: #0f1113;
 }
 
 .card-base {
@@ -331,7 +331,7 @@ input[type="color"] {
 .ov-std .role {
   position: absolute;
   left: 3.2%;
-  right: 42%;
+  right: 36%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -362,19 +362,22 @@ input[type="color"] {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-right: 1.6%;
   overflow: hidden;
 }
 
 .ov-mgmt .mgmt-text {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 18px;
-  height: 78%;
-  max-width: 92%;
+  gap: 10px;
+  height: 90%;
+  width: auto;
+  max-width: 86%;
   color: #fff;
+  text-align: right;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
 }
@@ -387,17 +390,17 @@ input[type="color"] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 46%;
+  max-height: 38%;
 }
 
 .ov-mgmt .dept {
-  font-size: clamp(10px, 1.5vw, 13px);
+  font-size: clamp(10px, 1.55vw, 13px);
   font-weight: 600;
-  opacity: 0.9;
+  opacity: 0.92;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 40%;
+  max-height: 58%;
 }
 
 .ov-tf .tint {
@@ -440,15 +443,6 @@ input[type="color"] {
   font-family: var(--mono);
 }
 
-.hint {
-  margin-top: 10px;
-  width: 100%;
-  max-width: 540px;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.4;
-}
-
 .tabs {
   display: flex;
   gap: 4px;
@@ -468,7 +462,7 @@ input[type="color"] {
 .tab.active {
   background: var(--ink);
   border-color: var(--ink);
-  color: #fff;
+  color: #111;
 }
 
 .local-bar {
@@ -490,7 +484,7 @@ input[type="color"] {
 .preset {
   position: relative;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--panel-2);
   padding: 10px 10px 10px 12px;
   cursor: pointer;
   border-left: 3px solid var(--pc, var(--accent));
@@ -498,7 +492,7 @@ input[type="color"] {
 
 .preset:hover {
   border-color: var(--line-strong);
-  background: #faf7f1;
+  background: #23282e;
 }
 
 .preset-name {
@@ -526,7 +520,7 @@ input[type="color"] {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #ddd7cb;
+  background: #3a4149;
 }
 
 .pp.on {
@@ -544,7 +538,7 @@ input[type="color"] {
   width: 18px;
   height: 18px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--panel);
   color: var(--accent);
   display: none;
   cursor: pointer;
@@ -570,7 +564,7 @@ input[type="color"] {
   inset: 0;
   display: grid;
   place-items: center;
-  background: rgba(20, 22, 24, 0.45);
+  background: rgba(0, 0, 0, 0.55);
   z-index: 40;
   padding: 16px;
 }

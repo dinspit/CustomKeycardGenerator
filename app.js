@@ -12,13 +12,6 @@ const TYPE_LABELS = {
   KeycardCustomManagement: "MANAGEMENT"
 };
 
-const TYPE_HINTS = {
-  KeycardCustomSite02: "Стандартная карта: цвет сверху, служба и должность в шапке.",
-  KeycardCustomMetalCase: "Металлический кейс: тот же шаблон Site-02, чуть темнее.",
-  KeycardCustomTaskForce: "Оперативник: на карте только цвет и уровни. Имя берётся из инвентаря.",
-  KeycardCustomManagement: "Управление: цвет слева. Должность сверху полосы, служба снизу."
-};
-
 const COLORS = {
   con: "#c0181a",
   arm: "#2f74b8",
@@ -70,7 +63,6 @@ const refs = {
   cmdOut: $("cmdOut"),
   copyBtn: $("copyBtn"),
   stageLabel: $("stageLabel"),
-  typeHint: $("typeHint"),
   cardWrap: $("cardWrap"),
   serverGrid: $("serverGrid"),
   localGrid: $("localGrid"),
@@ -200,7 +192,6 @@ function update() {
   }
   refs.cardWrap.innerHTML = cardHtml(st);
   refs.stageLabel.textContent = TYPE_LABELS[st.type] || st.type;
-  refs.typeHint.textContent = TYPE_HINTS[st.type] || "";
   refs.cmdOut.textContent = commandString(st);
 }
 
