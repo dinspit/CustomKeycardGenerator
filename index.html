@@ -3,129 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Генератор ключ-карт</title>
+  <title>CKRP — Генератор ключ-карт</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <svg viewBox="0 0 20 20"><path d="M10 1L3 5.5v9L10 19l7-4.5v-9L10 1zm0 2.2 5.3 3.4v6.8L10 16.8 4.7 13.4V6.6z"></path></svg>
+  <header class="top">
+    <div class="brand">
+      <span class="brand-mark">CK</span>
+      <div>
+        <div class="brand-title">Генератор ключ-карт</div>
+        <div class="brand-sub">CustomRolePlayKeycard · AmSerg Games</div>
+      </div>
     </div>
-    <div class="title">Генератор ключ-карт</div>
-    <div class="sub">AmSerg Games</div>
-    <div class="version">CKRP v1.0</div>
+    <div class="top-actions">
+      <button type="button" id="exportBtn" class="btn btn-ghost">Экспорт</button>
+      <button type="button" id="importBtn" class="btn btn-ghost">Импорт</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
   </header>
 
-  <main class="app">
-    <section class="col">
-      <div class="panel">
-        <div class="ph"><div class="dot"></div><h2>Параметры карты</h2></div>
-        <div class="pb">
-          <div class="field"><label for="cardId">ID игрока</label><input id="cardId" type="text" value="0" placeholder="Steam / Player ID"></div>
-          <div class="field"><label for="kcName">Имя карты в инвентаре</label><input id="kcName" type="text" value="Ключ-Карта_Логиста"></div>
-          <div class="field"><label for="dept">Департамент</label><input id="dept" type="text" value="Логистическая Служба"></div>
-          <div class="field"><label for="role">Роль / Должность</label><input id="role" type="text" value="Логист"></div>
-          <div class="field">
-            <label for="cardType">Тип карты</label>
-            <select id="cardType">
-              <option value="KeycardCustomSite02">Стандартная карта (Site-02)</option>
-              <option value="KeycardCustomMetalCase">Карта в металлическом кейсе</option>
-              <option value="KeycardCustomTaskForce">Карта оперативника (Task Force)</option>
-              <option value="KeycardCustomManagement">Управленческая карта (Management)</option>
-            </select>
+  <main class="layout">
+    <aside class="side">
+      <section class="block">
+        <h2>Параметры</h2>
+        <label class="field">
+          <span>ID игрока</span>
+          <input id="cardId" type="text" value="0" autocomplete="off">
+        </label>
+        <label class="field">
+          <span>Имя в инвентаре</span>
+          <input id="kcName" type="text" value="Ключ-Карта_Логиста" autocomplete="off">
+        </label>
+        <label class="field">
+          <span>Департамент / служба</span>
+          <input id="dept" type="text" value="Логистическая Служба" autocomplete="off">
+        </label>
+        <label class="field">
+          <span>Роль / должность</span>
+          <input id="role" type="text" value="Логист" placeholder="%Role%" autocomplete="off">
+        </label>
+        <label class="field">
+          <span>Тип карты</span>
+          <select id="cardType">
+            <option value="KeycardCustomSite02">Site-02 — стандартная</option>
+            <option value="KeycardCustomMetalCase">Metal Case — металлический кейс</option>
+            <option value="KeycardCustomTaskForce">Task Force — оперативник</option>
+            <option value="KeycardCustomManagement">Management — управленческая</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Цвет</span>
+          <div class="color-line">
+            <input id="cardColor" type="color" value="#528198">
+            <input id="colorHex" type="text" value="#528198" maxlength="7" spellcheck="false">
           </div>
-          <div class="field">
-            <label for="colorHex">Цвет карты</label>
-            <div class="color-row">
-              <input id="cardColor" type="color" value="#528198">
-              <input id="colorHex" type="text" value="#528198" maxlength="7" placeholder="#RRGGBB">
-            </div>
-          </div>
-        </div>
-      </div>
+        </label>
+      </section>
 
-      <div class="panel">
-        <div class="ph"><div class="dot"></div><h2>Уровни доступа</h2></div>
-        <div class="pb">
-          <div class="lv-grid">
-            <div class="field">
-              <label for="admLvl">⚙ Администр.</label>
-              <div class="lv-control"><button id="admMinus">−</button><input id="admLvl" type="number" min="0" max="3" value="0"><button id="admPlus">+</button></div>
+      <section class="block">
+        <h2>Уровни доступа</h2>
+        <div class="levels">
+          <label class="level">
+            <span><i class="dot con"></i> Содержание</span>
+            <div class="step">
+              <button type="button" id="conMinus">−</button>
+              <input id="conLvl" type="number" min="0" max="3" value="0">
+              <button type="button" id="conPlus">+</button>
             </div>
-            <div class="field">
-              <label for="armLvl">🔫 Оружейная</label>
-              <div class="lv-control"><button id="armMinus">−</button><input id="armLvl" type="number" min="0" max="3" value="0"><button id="armPlus">+</button></div>
+          </label>
+          <label class="level">
+            <span><i class="dot arm"></i> Оружейная</span>
+            <div class="step">
+              <button type="button" id="armMinus">−</button>
+              <input id="armLvl" type="number" min="0" max="3" value="0">
+              <button type="button" id="armPlus">+</button>
             </div>
-            <div class="field">
-              <label for="conLvl">☢ Содержание</label>
-              <div class="lv-control"><button id="conMinus">−</button><input id="conLvl" type="number" min="0" max="3" value="0"><button id="conPlus">+</button></div>
+          </label>
+          <label class="level">
+            <span><i class="dot adm"></i> Администр.</span>
+            <div class="step">
+              <button type="button" id="admMinus">−</button>
+              <input id="admLvl" type="number" min="0" max="3" value="0">
+              <button type="button" id="admPlus">+</button>
             </div>
-          </div>
+          </label>
         </div>
-      </div>
+      </section>
 
-      <div class="panel">
-        <div class="ph"><div class="dot"></div><h2>Команда</h2></div>
-        <div class="pb">
-          <div id="cmdOut" class="cmd"></div>
-          <div class="row-btn">
-            <button id="copyBtn" class="btn btn-red">
-              <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"></path><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"></path></svg>
-              Скопировать
-            </button>
-          </div>
+      <section class="block">
+        <h2>Команда RA</h2>
+        <pre id="cmdOut" class="cmd"></pre>
+        <button type="button" id="copyBtn" class="btn btn-main">Скопировать</button>
+      </section>
+    </aside>
+
+    <section class="main">
+      <section class="block preview-block">
+        <div class="preview-head">
+          <h2>Превью</h2>
+          <span id="stageLabel" class="meta">SITE-02</span>
         </div>
-      </div>
-    </section>
-
-    <section class="col">
-      <div class="stage">
-        <div class="stage-head"><span>ПРЕДПРОСМОТР</span><span id="stageLabel">SITE-02 / СТАНДАРТНАЯ</span></div>
         <div id="cardWrap" class="card-wrap"></div>
         <div class="legend">
-          <span><i style="background:#d4aa4a"></i>⚙ Администр.</span>
-          <span><i style="background:#4a8ed4"></i>🔫 Оружейная</span>
-          <span><i style="background:#c0181a"></i>☢ Содержание</span>
+          <span><i class="dot con"></i> Содержание</span>
+          <span><i class="dot arm"></i> Оружейная</span>
+          <span><i class="dot adm"></i> Администр.</span>
         </div>
-      </div>
+        <p class="hint" id="typeHint"></p>
+      </section>
 
-      <div class="panel">
-        <div class="ph"><div class="dot"></div><h2>Шаблоны</h2></div>
-        <div class="pb">
+      <section class="block">
+        <div class="preview-head">
+          <h2>Шаблоны</h2>
           <div class="tabs">
-            <button class="tab active" data-tab="server">Серверные</button>
-            <button class="tab" data-tab="local">Мои шаблоны</button>
+            <button type="button" class="tab active" data-tab="server">Сервер</button>
+            <button type="button" class="tab" data-tab="local">Мои</button>
           </div>
-          <section id="serverPane">
-            <div id="serverGrid" class="preset-grid"></div>
-          </section>
-          <section id="localPane" style="display:none">
-            <div class="preset-actions">
-              <button id="savePresetBtn" class="btn btn-red">Сохранить текущую</button>
-              <button id="clearPresetsBtn" class="btn btn-ghost">Очистить все</button>
-            </div>
-            <div id="localGrid" class="preset-grid"></div>
-            <div id="localEmpty" class="empty">Нет сохраненных шаблонов.<br>Настройте карточку и нажмите «Сохранить текущую».</div>
-          </section>
         </div>
-      </div>
+
+        <div id="serverPane">
+          <div id="serverGrid" class="preset-grid"></div>
+        </div>
+
+        <div id="localPane" hidden>
+          <div class="local-bar">
+            <button type="button" id="savePresetBtn" class="btn btn-main">Сохранить текущую</button>
+            <button type="button" id="clearPresetsBtn" class="btn btn-ghost">Очистить</button>
+          </div>
+          <div id="localGrid" class="preset-grid"></div>
+          <div id="localEmpty" class="empty">Нет локальных шаблонов.</div>
+        </div>
+      </section>
     </section>
   </main>
 
-  <div id="modalBg" class="modal-bg">
-    <div class="modal">
+  <div id="modalBg" class="modal-bg" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
       <h3>Сохранить шаблон</h3>
-      <div class="field"><label for="presetNameInput">Название шаблона</label><input id="presetNameInput" type="text" maxlength="40" placeholder="Например: Мой логист"></div>
-      <div class="modal-foot">
-        <button id="cancelSaveBtn" class="btn btn-ghost">Отмена</button>
-        <button id="confirmSaveBtn" class="btn btn-red">Сохранить</button>
+      <label class="field">
+        <span>Название</span>
+        <input id="presetNameInput" type="text" maxlength="40" placeholder="Например: Мой логист">
+      </label>
+      <div class="modal-actions">
+        <button type="button" id="cancelSaveBtn" class="btn btn-ghost">Отмена</button>
+        <button type="button" id="confirmSaveBtn" class="btn btn-main">Сохранить</button>
       </div>
     </div>
   </div>
 
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
